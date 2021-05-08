@@ -18,28 +18,34 @@ class ParserTest(HelpPageTestCase):
         actual = self.parse_fixture('simple')
 
         files = actual['files']
-        self.assertEqual(files[0]['key'], 'en')
+        self.assertEqual(files['en']['key'], 'en')
         self.assertEqual(len(files), 1)
 
         subnodes = actual['subnodes']
         self.assertEqual(len(subnodes[0]['files']), 0)
-        self.assertEqual(subnodes[0]['subnodes'][0]['files'][0]['key'], 'de')
-        self.assertEqual(subnodes[0]['subnodes'][0]['files'][1]['key'], 'en')
+        self.assertEqual(
+            subnodes[0]['subnodes'][0]['files']['de']['key'], 'de')
+        self.assertEqual(
+            subnodes[0]['subnodes'][0]['files']['en']['key'], 'en')
         self.assertEqual(len(subnodes[0]['subnodes'][0]['files']), 2)
         self.assertEqual(
-            subnodes[0]['subnodes'][0]['subnodes'][0]['files'][0]['key'], 'de')
+            subnodes[0]['subnodes'][0]['subnodes'][0]['files']['de']['key'],
+            'de')
         self.assertEqual(
-            subnodes[0]['subnodes'][0]['subnodes'][0]['files'][1]['key'], 'en')
+            subnodes[0]['subnodes'][0]['subnodes'][0]['files']['en']['key'],
+            'en')
         self.assertEqual(
             len(subnodes[0]['subnodes'][0]['subnodes'][0]['files']), 2)
         self.assertEqual(
             len(subnodes[0]['subnodes'][0]['subnodes'][0]['subnodes']), 0)
         self.assertEqual(len(subnodes[0]['subnodes'][0]['subnodes']), 1)
-        self.assertEqual(subnodes[0]['subnodes'][1]['files'][0]['key'], 'de')
-        self.assertEqual(subnodes[0]['subnodes'][1]['files'][1]['key'], 'en')
+        self.assertEqual(
+            subnodes[0]['subnodes'][1]['files']['de']['key'], 'de')
+        self.assertEqual(
+            subnodes[0]['subnodes'][1]['files']['en']['key'], 'en')
         self.assertEqual(len(subnodes[0]['subnodes'][1]['files']), 2)
         self.assertEqual(len(subnodes[0]['subnodes'][1]['subnodes']), 0)
         self.assertEqual(len(subnodes[0]['subnodes']), 2)
-        self.assertEqual(subnodes[1]['files'][0]['key'], 'en')
+        self.assertEqual(subnodes[1]['files']['en']['key'], 'en')
         self.assertEqual(len(subnodes[1]['files']), 1)
         self.assertEqual(len(subnodes[1]['subnodes']), 0)

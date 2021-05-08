@@ -6,7 +6,7 @@ class HelpNodeParser(object):
         self.file_parser = file_parser
 
     def parse(self, dir):
-        files = []
+        files = {}
         subnodes = []
 
         for file in sorted(os.listdir(dir)):
@@ -14,7 +14,8 @@ class HelpNodeParser(object):
             if os.path.isdir(file_full):
                 subnodes.append(self.parse(file_full))
             else:
-                files.append(self.file_parser.parse(file_full))
+                file = self.file_parser.parse(file_full)
+                files[file['key']] = file
 
         ret = {
             'files': files,
