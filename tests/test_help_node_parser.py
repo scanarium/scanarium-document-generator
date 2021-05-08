@@ -17,6 +17,8 @@ class HelpNodeParserTest(HelpPageTestCase):
     def test_simple(self):
         actual = self.parse_fixture('simple')
 
+        self.assertTrue(actual['name'].endswith('simple'))
+
         files = actual['files']
         self.assertEqual(files['en']['key'], 'en')
         self.assertEqual(len(files), 1)

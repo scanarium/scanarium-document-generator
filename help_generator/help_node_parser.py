@@ -18,6 +18,7 @@ class HelpNodeParser(object):
                 files[file['key']] = file
 
         ret = {
+            'name': dir,
             'files': files,
             'subnodes': subnodes,
             }
