@@ -14,6 +14,10 @@ class HelpFileParserTest(HelpPageTestCase):
 
         return parser.parse(fixture_file)
 
-    def test_foo(self):
+    def test_key(self):
+        actual = self.parse_fixture('only-markdown')
+        self.assertEqual(actual['key'], 'only-markdown')
+
+    def test_markdown(self):
         actual = self.parse_fixture('only-markdown')
         self.assertEqual(actual['markdown'], '# Section foo\n\nbar\n')
