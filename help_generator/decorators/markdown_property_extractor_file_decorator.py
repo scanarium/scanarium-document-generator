@@ -12,11 +12,13 @@ class MarkdownPropertyExtractorFileDecorator(FileDecorator):
         while keep_searching:
             line = lines[-1]
             if line:
+                keep_searching = False
                 if ':' in line:
                     key, value = line.split(':', 1)
-                    properties[key.strip()] = value.strip()
-                else:
-                    keep_searching = False
+                    key = key.strip()
+                    if key and not key.strip('abcdefghijklmnopqrstuvwxyz-'):
+                        properties[key] = value.strip()
+                        keep_searching = True
 
             if keep_searching:
                 del lines[-1]

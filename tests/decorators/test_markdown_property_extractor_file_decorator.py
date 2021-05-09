@@ -78,3 +78,17 @@ class MarkdownPropertyExtractorFileDecoratorTest(HelpPageTestCase):
         self.assertEqual(file['markdown-properties'], {
                 'baz': 'quux'
         })
+
+    def test_alphabet(self):
+        file = {
+            'markdown': 'foo\nFoo:bar\nba-r:baz\nbar:baz',
+            }
+        decorator = MarkdownPropertyExtractorFileDecorator()
+
+        decorator.decorate_file(file, decorator.init_state())
+
+        self.assertEqual(file['markdown'], 'foo\nFoo:bar\n')
+        self.assertEqual(file['markdown-properties'], {
+                'ba-r': 'baz',
+                'bar': 'baz',
+        })
