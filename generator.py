@@ -3,6 +3,7 @@
 import argparse
 import collections.abc
 import json
+import os
 
 import help_generator
 
@@ -46,6 +47,21 @@ def update_dict(target, source, merge_lists=False):
             target[key] = source[key]
     return target
 
+
+def object_string_replace(obj, needle, replacement):
+    if isinstance(obj, collections.abc.Mapping):
+        ret = {}
+        for key, value in obj.items():
+            ret[key] = object_string_replace(value, needle, replacement)
+    elif isinstance(obj, list):
+        ret = [object_string_replace(x, needle, replacement) for x in obj]
+    elif isinstance(obj, str):
+        ret = obj.replace(needle, replacement)
+    else:
+        ret = obj
+    return ret
+
+
 if __name__ == "__main__":
     conf = {
         'source': '.',
@@ -61,6 +77,9 @@ if __name__ == "__main__":
             config_text_content = f.read()
         extra_config = json.loads(config_text_content)
         conf = update_dict(conf, extra_config)
+
+        conf_dir = os.path.dirname(os.path.abspath(args.config))
+        conf = object_string_replace(conf, '{conf_dir}', conf_dir)
 
     for field, value in [
         ['source', args.source],
