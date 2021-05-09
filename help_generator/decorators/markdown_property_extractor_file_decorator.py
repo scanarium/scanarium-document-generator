@@ -19,6 +19,8 @@ class MarkdownPropertyExtractorFileDecorator(FileDecorator):
                     if key and not key.strip('abcdefghijklmnopqrstuvwxyz-'):
                         properties[key] = value.strip()
                         keep_searching = True
+                else:
+                    keep_searching = not line.strip()
 
             if keep_searching:
                 del lines[-1]

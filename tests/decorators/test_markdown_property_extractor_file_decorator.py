@@ -92,3 +92,45 @@ class MarkdownPropertyExtractorFileDecoratorTest(HelpPageTestCase):
                 'ba-r': 'baz',
                 'bar': 'baz',
         })
+
+    def test_multiple(self):
+        file = {
+            'markdown': 'foo\nfoo:bar\nbar:baz',
+            }
+        decorator = MarkdownPropertyExtractorFileDecorator()
+
+        decorator.decorate_file(file, decorator.init_state())
+
+        self.assertEqual(file['markdown'], 'foo\n')
+        self.assertEqual(file['markdown-properties'], {
+                'foo': 'bar',
+                'bar': 'baz',
+        })
+
+    def test_multiple_empty_line(self):
+        file = {
+            'markdown': 'foo\nfoo:bar\n\nbar:baz',
+            }
+        decorator = MarkdownPropertyExtractorFileDecorator()
+
+        decorator.decorate_file(file, decorator.init_state())
+
+        self.assertEqual(file['markdown'], 'foo\n')
+        self.assertEqual(file['markdown-properties'], {
+                'foo': 'bar',
+                'bar': 'baz',
+        })
+
+    def test_multiple_whitespace_line(self):
+        file = {
+            'markdown': 'foo\nfoo:bar\n \nbar:baz',
+            }
+        decorator = MarkdownPropertyExtractorFileDecorator()
+
+        decorator.decorate_file(file, decorator.init_state())
+
+        self.assertEqual(file['markdown'], 'foo\n')
+        self.assertEqual(file['markdown-properties'], {
+                'foo': 'bar',
+                'bar': 'baz',
+        })
