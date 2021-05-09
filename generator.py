@@ -53,5 +53,4 @@ if __name__ == "__main__":
         conf['additional_l10ns'] = []
 
     generator = help_generator.HelpGenerator()
-    generator.run(conf['source'], conf['target'], conf['default_l10n'],
-                  conf['additional_l10ns'])
+    generator.run(conf)

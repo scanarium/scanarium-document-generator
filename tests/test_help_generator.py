@@ -12,7 +12,12 @@ class HelpGeneratorTest(HelpPageTestCase):
         with tempfile.TemporaryDirectory(prefix='help-generator-test-') as dir:
             fixture_dir = os.path.join(FIXTURE_DIR, 'simple')
             generator = HelpGenerator()
-            generator.run(fixture_dir, dir, 'en', ['de'])
+            generator.run({
+                    'source': fixture_dir,
+                    'target': dir,
+                    'default_l10n': 'en',
+                    'additional_l10ns': ['de'],
+                    })
 
             with open(os.path.join(dir, 'all.html.en')) as f:
                 contents = f.read()
