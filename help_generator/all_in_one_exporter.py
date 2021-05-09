@@ -3,7 +3,9 @@ import os
 from .help_generator_error import HelpGeneratorError
 from .markdown_renderer import MarkdownRenderer
 
-HEADER = '<html><body>'
+HEADER = '<html><meta>'
+'<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />'
+'</meta><body>'
 FOOTER = '</body></html>'
 
 
