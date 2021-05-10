@@ -34,5 +34,5 @@ class DocumentGenerator(object):
 
         ResourceExporter(conf.get('resources', []), output_dir).export()
 
-        AllInOneExporter(root_node, output_dir, default_l10n, other_l10ns
-                         ).export()
+        AllInOneExporter(root_node, output_dir, default_l10n, other_l10ns,
+                         conf.get('exporter', [])).export()

@@ -21,6 +21,12 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
     `default_l10n`. (Default: `[]`)
 * `resources`: A list of directories to copy into the target directory.
     (Default: [])
+* `exporter`: A dict of settings for exporters. (Default: {}) The following
+    key/values are supported:
+    * `html-footer-file`: If set, the contents of this file are used as footer
+        for html files. (Default: None)
+    * `html-header-file`: If set, the contents of this file are used as header
+        for html files. (Default: None)
 
 Directories are relative to the current working directory. E.g.: If the
 generator is started from directory `.../foo`, the config file is

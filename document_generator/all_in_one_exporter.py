@@ -10,11 +10,22 @@ FOOTER = '</body></html>'
 
 
 class AllInOneExporter(object):
-    def __init__(self, root_node, output_dir, default_l10n, other_l10ns):
+    def __init__(self, root_node, output_dir, default_l10n, other_l10ns,
+                 conf={}):
         self.root_node = root_node
         self.output_dir = output_dir
         self.default_l10n = default_l10n
         self.all_l10ns = [self.default_l10n] + other_l10ns
+        self.header = HEADER
+        self.footer = FOOTER
+
+        if 'html-header-file' in conf:
+            with open(conf['html-header-file'], 'rt') as f:
+                self.header = f.read()
+
+        if 'html-footer-file' in conf:
+            with open(conf['html-footer-file'], 'rt') as f:
+                self.footer = f.read()
 
     def _get_full_markdown(self, node, l10n):
         ret = ''
@@ -46,6 +57,6 @@ class AllInOneExporter(object):
             markdown = self._get_full_markdown(self.root_node, l10n)
             file = os.path.join(self.output_dir, f'all.html.{l10n}')
             with open(file, 'w+') as f:
-                f.write(HEADER)
+                f.write(self.header)
                 f.write(renderer.render(markdown))
-                f.write(FOOTER)
+                f.write(self.footer)
