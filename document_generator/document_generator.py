@@ -11,12 +11,6 @@ from .decorators import MarkdownPropertyExtractorFileDecorator
 
 class DocumentGenerator(object):
     def run(self, conf):
-        # conf has to be a dictionary with the following key/values
-        # * `source`: the directory for the markdown files.
-        # * `target`: the directory to store the generated files in.
-        # * `default_l10n`: The default localization to use.
-        # * `additional_l10ns`: A list of localizations to build in addition
-        #     to the `default_l10n`.
         markdown_dir = conf['source']
         output_dir = conf['target']
         default_l10n = conf['default_l10n']
