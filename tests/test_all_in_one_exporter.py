@@ -43,12 +43,14 @@ class AllInOneExporterTest(DocumentPageTestCase):
 
             with open(os.path.join(dir, 'all.html.en')) as f:
                 contents = f.read()
-            self.assertIn('<html', contents)
+            self.assertStartsWith(contents, '<html')
             self.assertIn('fooEn', contents)
             self.assertIn('barEn', contents)
+            self.assertEndsWith(contents, '</html>')
 
             with open(os.path.join(dir, 'all.html.de')) as f:
                 contents = f.read()
-            self.assertIn('<html', contents)
+            self.assertStartsWith(contents, '<html')
             self.assertIn('fooDe', contents)
             self.assertIn('barEn', contents)
+            self.assertEndsWith(contents, '</html>')
