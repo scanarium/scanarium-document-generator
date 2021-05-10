@@ -27,6 +27,9 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
         for html files. (Default: None)
     * `html-header-file`: If set, the contents of this file are used as header
         for html files. (Default: None)
+    * `html-template-file`: If set, the contents of this file up to a line
+        `<!-- HEADER-END -->` is used as header, and contents belowe a line
+        `<!-- FOOTER-START -->` are used as footer. (Default: None)
 
 Directories are relative to the current working directory. E.g.: If the
 generator is started from directory `.../foo`, the config file is

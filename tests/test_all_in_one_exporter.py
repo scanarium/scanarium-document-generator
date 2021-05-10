@@ -114,3 +114,46 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertStartsWith(contents, '<html')
             self.assertIn('fooEn', contents)
             self.assertEndsWith(contents, 'FOOTER')
+
+    def test_template_file(self):
+        node1 = {
+            'files': {
+                'en': {
+                    'markdown': 'fooEn'
+                    },
+                },
+            'subnodes': [],
+            }
+
+        with self.tempDir() as dir:
+            template = '\n'.join([
+                    'HEADER1',
+                    'HEADER2',
+                    '<!-- HEADER-END -->',
+                    'OMITTED1',
+                    'OMITTED2',
+                    '<!-- FOOTER-START -->',
+                    'FOOTER1',
+                    'FOOTER2',
+                    ])
+            template_file = os.path.join(dir, 'template')
+            with open(template_file, 'w+') as f:
+                f.write(template)
+
+            conf = {
+                'html-template-file': template_file,
+                }
+
+            exporter = AllInOneExporter(node1, dir, 'en', [], conf)
+            exporter.export()
+
+            with open(os.path.join(dir, 'all.html.en')) as f:
+                contents = f.read()
+
+            self.assertStartsWith(contents, 'HEADER1')
+            self.assertIn('HEADER2', contents)
+            self.assertIn('fooEn', contents)
+            self.assertIn('FOOTER1', contents)
+            self.assertEndsWith(contents, 'FOOTER2')
+
+            self.assertNotIn('OMITTED', contents)

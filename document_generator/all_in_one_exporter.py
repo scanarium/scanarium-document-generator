@@ -19,6 +19,29 @@ class AllInOneExporter(object):
         self.header = HEADER
         self.footer = FOOTER
 
+        if 'html-template-file' in conf:
+            with open(conf['html-template-file'], 'rt') as f:
+                header_lines = []
+                footer_lines = []
+                mode = 'HEADER'
+                for line in f.readlines():
+                    if mode == 'HEADER':
+                        if line.strip() == '<!-- HEADER-END -->':
+                            mode = 'MIDDLE'
+                        else:
+                            header_lines.append(line)
+                    elif mode == 'MIDDLE':
+                        if line.strip() == '<!-- FOOTER-START -->':
+                            mode = 'FOOTER'
+                    elif mode == 'FOOTER':
+                        footer_lines.append(line)
+                    else:
+                        raise DocumentGeneratorError(
+                            'SE_LOGIC', f'Unknown mode "{mode}"')
+
+                self.header = '\n'.join(header_lines)
+                self.footer = '\n'.join(footer_lines)
+
         if 'html-header-file' in conf:
             with open(conf['html-header-file'], 'rt') as f:
                 self.header = f.read()
