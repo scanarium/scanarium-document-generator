@@ -2,12 +2,12 @@ import os
 import subprocess
 import tempfile
 
-from .environment import HelpPageTestCase
+from .environment import DocumentPageTestCase
 
-FIXTURE_DIR = os.path.join('tests', 'fixtures', 'help-node-parser')
+FIXTURE_DIR = os.path.join('tests', 'fixtures', 'document-node-parser')
 
 
-class HelpGeneratorTest(HelpPageTestCase):
+class DocumentGeneratorTest(DocumentPageTestCase):
     def run_command(self, command):
         process = subprocess.run(command,
                                  check=True,
@@ -21,7 +21,8 @@ class HelpGeneratorTest(HelpPageTestCase):
         }
 
     def test_simple(self):
-        with tempfile.TemporaryDirectory(prefix='help-generator-test-') as dir:
+        with tempfile.TemporaryDirectory(
+                prefix='document-generator-test-') as dir:
             command = [
                 os.path.join('.', 'generator.py'),
                 '--source', os.path.join(FIXTURE_DIR, 'simple'),

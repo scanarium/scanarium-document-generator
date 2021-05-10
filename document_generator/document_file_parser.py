@@ -1,7 +1,7 @@
 import os
 
 
-class HelpFileParser(object):
+class DocumentFileParser(object):
     def parse(self, file_name):
         key = os.path.basename(file_name)
         if key.endswith('.md'):

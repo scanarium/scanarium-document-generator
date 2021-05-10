@@ -1,8 +1,8 @@
-from tests import HelpPageTestCase
-from help_generator.decorators import HeaderFileDecorator
+from tests import DocumentPageTestCase
+from document_generator.decorators import HeaderFileDecorator
 
 
-class HeaderFileDecoratorTest(HelpPageTestCase):
+class HeaderFileDecoratorTest(DocumentPageTestCase):
     def test_empty(self):
         file = {
             'markdown': '',

@@ -1,12 +1,12 @@
 import os
 
-from .environment import HelpPageTestCase
-from help_generator import Parser
+from .environment import DocumentPageTestCase
+from document_generator import Parser
 
-FIXTURE_DIR = os.path.join('tests', 'fixtures', 'help-node-parser')
+FIXTURE_DIR = os.path.join('tests', 'fixtures', 'document-node-parser')
 
 
-class ParserTest(HelpPageTestCase):
+class ParserTest(DocumentPageTestCase):
     def parse_fixture(self, name):
         fixture_file = os.path.join(FIXTURE_DIR, name)
 

@@ -5,12 +5,12 @@ import collections.abc
 import json
 import os
 
-import help_generator
+import document_generator
 
 
 def parse_arguments(conf):
     parser = argparse.ArgumentParser(
-        description='Generates help pages from markdown')
+        description='Generates documents from markdown')
     parser.add_argument(
         '--config',
         help='The name of a json file to load the configuration from'
@@ -97,5 +97,5 @@ if __name__ == "__main__":
         else:
             conf['additional_l10ns'] = []
 
-    generator = help_generator.HelpGenerator()
+    generator = document_generator.DocumentGenerator()
     generator.run(conf)

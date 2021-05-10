@@ -9,7 +9,7 @@ from .decorators import LevelDecorator
 from .decorators import MarkdownPropertyExtractorFileDecorator
 
 
-class HelpGenerator(object):
+class DocumentGenerator(object):
     def run(self, conf):
         # conf has to be a dictionary with the following key/values
         # * `source`: the directory for the markdown files.

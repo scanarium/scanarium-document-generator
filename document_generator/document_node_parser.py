@@ -1,7 +1,7 @@
 import os
 
 
-class HelpNodeParser(object):
+class DocumentNodeParser(object):
     def __init__(self, file_parser):
         self.file_parser = file_parser
 

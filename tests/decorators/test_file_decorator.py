@@ -1,5 +1,5 @@
-from tests import HelpPageTestCase
-from help_generator.decorators import FileDecorator
+from tests import DocumentPageTestCase
+from document_generator.decorators import FileDecorator
 
 
 class StubDecorator(FileDecorator):
@@ -18,7 +18,7 @@ class StubDecorator(FileDecorator):
         state['number'] += 1
 
 
-class FileDecoratorTest(HelpPageTestCase):
+class FileDecoratorTest(DocumentPageTestCase):
     def test_simple(self):
         node111 = {
             'name': 'node111',

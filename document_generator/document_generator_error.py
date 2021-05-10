@@ -1,4 +1,4 @@
-class HelpGeneratorError(Exception):
+class DocumentGeneratorError(Exception):
     def parse(self, code, msg):
         super().__init_()
         self.code = code

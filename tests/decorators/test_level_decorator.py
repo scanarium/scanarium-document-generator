@@ -1,8 +1,8 @@
-from tests import HelpPageTestCase
-from help_generator.decorators import LevelDecorator
+from tests import DocumentPageTestCase
+from document_generator.decorators import LevelDecorator
 
 
-class LevelDecoratorTest(HelpPageTestCase):
+class LevelDecoratorTest(DocumentPageTestCase):
     def test_no_files(self):
         node = {
             'files': {},

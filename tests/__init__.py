@@ -1,5 +1,5 @@
-from .environment import HelpPageTestCase
+from .environment import DocumentPageTestCase
 
 __all__ = (
-    'HelpPageTestCase',
+    'DocumentPageTestCase',
     )

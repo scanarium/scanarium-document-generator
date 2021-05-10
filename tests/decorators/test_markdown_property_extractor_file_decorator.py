@@ -1,8 +1,9 @@
-from tests import HelpPageTestCase
-from help_generator.decorators import MarkdownPropertyExtractorFileDecorator
+from tests import DocumentPageTestCase
+from document_generator.decorators import \
+    MarkdownPropertyExtractorFileDecorator
 
 
-class MarkdownPropertyExtractorFileDecoratorTest(HelpPageTestCase):
+class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
     def test_no_properties(self):
         file = {
             'markdown': 'foo\nbar\n',

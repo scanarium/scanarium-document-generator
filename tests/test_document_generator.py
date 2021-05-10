@@ -1,17 +1,18 @@
 import os
 import tempfile
 
-from .environment import HelpPageTestCase
-from help_generator import HelpGenerator
+from .environment import DocumentPageTestCase
+from document_generator import DocumentGenerator
 
-FIXTURE_DIR = os.path.join('tests', 'fixtures', 'help-node-parser')
+FIXTURE_DIR = os.path.join('tests', 'fixtures', 'document-node-parser')
 
 
-class HelpGeneratorTest(HelpPageTestCase):
+class DocumentGeneratorTest(DocumentPageTestCase):
     def test_simple(self):
-        with tempfile.TemporaryDirectory(prefix='help-generator-test-') as dir:
+        with tempfile.TemporaryDirectory(
+                prefix='document-generator-test-') as dir:
             fixture_dir = os.path.join(FIXTURE_DIR, 'simple')
-            generator = HelpGenerator()
+            generator = DocumentGenerator()
             generator.run({
                     'source': fixture_dir,
                     'target': dir,

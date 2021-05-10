@@ -1,6 +1,6 @@
 import os
 
-from .help_generator_error import HelpGeneratorError
+from .document_generator_error import DocumentGeneratorError
 from .markdown_renderer import MarkdownRenderer
 
 HEADER = '<html><meta>'
@@ -27,7 +27,7 @@ class AllInOneExporter(object):
                 try:
                     file = files[self.default_l10n]
                 except KeyError:
-                    raise HelpGeneratorError(
+                    raise DocumentGeneratorError(
                         'HGE_MISSING_L10N',
                         f'No localization "{l10n}" missing for node '
                         f'{node["name"]} and default "{self.default_l10n}" '

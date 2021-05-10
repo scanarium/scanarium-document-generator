@@ -1,13 +1,13 @@
 import os
 import tempfile
 
-from .environment import HelpPageTestCase
-from help_generator import AllInOneExporter
+from .environment import DocumentPageTestCase
+from document_generator import AllInOneExporter
 
-FIXTURE_DIR = os.path.join('tests', 'fixtures', 'help-node-parser')
+FIXTURE_DIR = os.path.join('tests', 'fixtures', 'document-node-parser')
 
 
-class AllInOneExporterTest(HelpPageTestCase):
+class AllInOneExporterTest(DocumentPageTestCase):
     def test_simple(self):
         node111 = {
             'files': {
@@ -38,7 +38,8 @@ class AllInOneExporterTest(HelpPageTestCase):
             },
             'subnodes': [node11],
         }
-        with tempfile.TemporaryDirectory(prefix='help-generator-test-') as dir:
+        with tempfile.TemporaryDirectory(
+                prefix='document-generator-test-') as dir:
             exporter = AllInOneExporter(node1, dir, 'en', ['de'])
             exporter.export()
 

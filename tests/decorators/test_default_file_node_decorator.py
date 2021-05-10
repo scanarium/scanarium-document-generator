@@ -1,8 +1,8 @@
-from tests import HelpPageTestCase
-from help_generator.decorators import DefaultFileNodeDecorator
+from tests import DocumentPageTestCase
+from document_generator.decorators import DefaultFileNodeDecorator
 
 
-class DefaultFileNodeDecoratorTest(HelpPageTestCase):
+class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
     def test_no_files(self):
         node = {
             'files': {},

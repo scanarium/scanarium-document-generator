@@ -1,8 +1,8 @@
-from .environment import HelpPageTestCase
-from help_generator import MarkdownRenderer
+from .environment import DocumentPageTestCase
+from document_generator import MarkdownRenderer
 
 
-class MarkdownRendererTest(HelpPageTestCase):
+class MarkdownRendererTest(DocumentPageTestCase):
     def assertRendered(self, input, expected):
         renderer = MarkdownRenderer()
         actual = renderer.render(input)
