@@ -19,6 +19,8 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
 * `default_l10n`: The default localization to use. (Default: `en`)
 * `additional_l10ns`: A list of localizations to build in addition to the
     `default_l10n`. (Default: `[]`)
+* `resources`: A list of directories to copy into the target directory.
+    (Default: [])
 
 Directories are relative to the current working directory. E.g.: If the
 generator is started from directory `.../foo`, the config file is

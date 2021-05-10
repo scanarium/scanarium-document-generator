@@ -2,6 +2,7 @@ import os
 
 from .all_in_one_exporter import AllInOneExporter
 from .parser import Parser
+from .resource_exporter import ResourceExporter
 from .decorators import DefaultFileNodeDecorator
 from .decorators import HeaderFileDecorator
 from .decorators import IdDecorator
@@ -30,6 +31,8 @@ class DocumentGenerator(object):
             decorator.run(root_node, state)
 
         os.makedirs(output_dir, exist_ok=True)
+
+        ResourceExporter(conf.get('resources', []), output_dir).export()
 
         AllInOneExporter(root_node, output_dir, default_l10n, other_l10ns
                          ).export()
