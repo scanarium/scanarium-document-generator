@@ -1,5 +1,4 @@
 import os
-import tempfile
 
 from .environment import DocumentPageTestCase
 from document_generator import AllInOneExporter
@@ -38,8 +37,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
             },
             'subnodes': [node11],
         }
-        with tempfile.TemporaryDirectory(
-                prefix='document-generator-test-') as dir:
+        with self.tempDir() as dir:
             exporter = AllInOneExporter(node1, dir, 'en', ['de'])
             exporter.export()
 

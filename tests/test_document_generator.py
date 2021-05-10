@@ -1,5 +1,4 @@
 import os
-import tempfile
 
 from .environment import DocumentPageTestCase
 from document_generator import DocumentGenerator
@@ -9,8 +8,7 @@ FIXTURE_DIR = os.path.join('tests', 'fixtures', 'document-node-parser')
 
 class DocumentGeneratorTest(DocumentPageTestCase):
     def test_simple(self):
-        with tempfile.TemporaryDirectory(
-                prefix='document-generator-test-') as dir:
+        with self.tempDir() as dir:
             fixture_dir = os.path.join(FIXTURE_DIR, 'simple')
             generator = DocumentGenerator()
             generator.run({

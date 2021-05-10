@@ -1,6 +1,5 @@
 import os
 import subprocess
-import tempfile
 
 from .environment import DocumentPageTestCase
 
@@ -21,8 +20,7 @@ class DocumentGeneratorTest(DocumentPageTestCase):
         }
 
     def test_simple(self):
-        with tempfile.TemporaryDirectory(
-                prefix='document-generator-test-') as dir:
+        with self.tempDir() as dir:
             command = [
                 os.path.join('.', 'generator.py'),
                 '--source', os.path.join(FIXTURE_DIR, 'simple'),
