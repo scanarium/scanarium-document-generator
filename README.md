@@ -81,3 +81,37 @@ Common properties are:
     increase the number's decimal places, so tooling can see that translations
     do not need to get updated. If a file is missing the `version` tag, it is
     assumed to be `1`.
+
+## Data model
+
+### Node
+
+Each node is represented by a dictionary with the following key/values.
+
+| key | creator | value |
+| --- | ---     | ---   |
+| `files` | DocumentNodeParser | A dictionary of [file dicts](#file). The keys are the file names (without path, without trailing `.md`. See [Node `files` keys](#node-files-keys) for more details) and the values are [file dicts](#file) for this language.
+| `name` | DocumentNodeParser | The directory of this node |
+| `subnodes` | DocumentNodeParser | The list of subnodes for this node ordered by the way they get rendered.|
+
+### Node `files` keys
+
+| key | creator | value |
+| --- | ---     | ---   |
+| (some language) | DocumentNodeParser | The file dict for this language |
+| `default` | DefaultFileNodeDecorator | The file dict for the default language |
+
+
+### File
+
+Each file is represented by a dictionary with the following key/values.
+
+| key | creator | value |
+| --- | ---     | ---   |
+| `key` | DocumentFileParser | The name (i.e.: language) of the file without the trailing `.md` |
+| `file_name` | DocumentFileParser | The name of the file (with path) |
+| `raw-content` | DocumentFileParser | The raw file contents as string |
+| `markdown` | MarkdownPropertyExtractorFileDecorator | The markdown part of `raw-content` as string. The `HeaderFileDecorator` adjusts the format of the first line. |
+| `content-properties` | Properties extracted from `raw-content` as string/string dictionary. |
+| `level` | LevelDecorator | The depth in the node hierarchy of the node that this file belongs to. |
+| `id` | IdDecorator | The `id` of the `default` file for this node.
