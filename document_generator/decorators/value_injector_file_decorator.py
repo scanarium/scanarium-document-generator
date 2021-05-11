@@ -31,5 +31,3 @@ class ValueInjectorFileDecorator(FileDecorator):
             r'{\s*=\s*([a-z]+)\s*\(([^)]*)\)\s*}',
             replacement,
             file['markdown'])
-        # {=translate(space)}
-        # {=macro(foo,{=translate({=property(scene)})}
