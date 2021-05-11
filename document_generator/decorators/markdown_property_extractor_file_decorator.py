@@ -30,5 +30,5 @@ class MarkdownPropertyExtractorFileDecorator(FileDecorator):
         while lines and not lines[-1]:
             lines = lines[:-1]
 
-        file['markdown'] = '\n'.join(lines) + '\n'
+        file['markdown'] = '\n'.join(lines) + ('\n' if lines else '')
         file['markdown-properties'] = properties
