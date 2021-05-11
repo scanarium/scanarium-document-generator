@@ -8,6 +8,7 @@ from .decorators import HeaderFileDecorator
 from .decorators import IdDecorator
 from .decorators import LevelDecorator
 from .decorators import MarkdownPropertyExtractorFileDecorator
+from .decorators import PropertyDecorator
 
 
 class DocumentGenerator(object):
@@ -24,6 +25,7 @@ class DocumentGenerator(object):
             MarkdownPropertyExtractorFileDecorator(),
             LevelDecorator(),
             DefaultFileNodeDecorator(default_l10n),
+            PropertyDecorator(),
             IdDecorator(),
             HeaderFileDecorator(),
         ]:

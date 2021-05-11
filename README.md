@@ -114,4 +114,5 @@ Each file is represented by a dictionary with the following key/values.
 | `key` | DocumentFileParser | The name (i.e.: language) of the file without the trailing `.md` |
 | `level` | LevelDecorator | The depth in the node hierarchy of the node that this file belongs to. |
 | `markdown` | MarkdownPropertyExtractorFileDecorator | The markdown part of `raw-content` as string. The `HeaderFileDecorator` adjusts the format of the first line. |
+| `properties` | PropertyDecorator | Merged `content-properties` of the `default`, overruled by those of `properties`, and finally overruled by those of the current file |
 | `raw-content` | DocumentFileParser | The raw file contents as string |
