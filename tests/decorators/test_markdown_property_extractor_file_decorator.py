@@ -135,3 +135,25 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
                 'foo': 'bar',
                 'bar': 'baz',
         })
+
+    def test_only_properties_with_whitespace_line(self):
+        file = {
+            'markdown': '\nfoo:bar\n\n',
+            }
+        decorator = MarkdownPropertyExtractorFileDecorator()
+
+        decorator.decorate_file(file, decorator.init_state())
+
+        self.assertEqual(file['markdown'], '\n')
+        self.assertEqual(file['markdown-properties'], {'foo': 'bar'})
+
+    def test_only_properties_without_whitespace_line(self):
+        file = {
+            'markdown': 'foo:bar',
+            }
+        decorator = MarkdownPropertyExtractorFileDecorator()
+
+        decorator.decorate_file(file, decorator.init_state())
+
+        self.assertEqual(file['markdown'], '\n')
+        self.assertEqual(file['markdown-properties'], {'foo': 'bar'})
