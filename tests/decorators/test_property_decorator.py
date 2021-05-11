@@ -17,11 +17,15 @@ class PropertyDecoratorTest(DocumentPageTestCase):
     def test_file_and_default(self):
         node = {
             'files': {
-                'default': {'content-properties': {
+                'default': {
+                    'key': 'fr',
+                    'content-properties': {
                         'only-default': 'default',
                         'default-and-en': 'default',
                         }},
-                'en': {'content-properties': {
+                'en': {
+                    'key': 'en',
+                    'content-properties': {
                         'only-en': 'en',
                         'default-and-en': 'en',
                         }},
@@ -33,11 +37,13 @@ class PropertyDecoratorTest(DocumentPageTestCase):
         decorator.run(node, decorator.init_state())
 
         self.assertEqual(node['files']['default']['properties'], {
+                'language': 'fr',
                 'only-default': 'default',
                 'default-and-en': 'default',
                 })
 
         self.assertEqual(node['files']['en']['properties'], {
+                'language': 'en',
                 'only-default': 'default',
                 'only-en': 'en',
                 'default-and-en': 'en',
@@ -78,6 +84,7 @@ class PropertyDecoratorTest(DocumentPageTestCase):
         decorator.run(node, decorator.init_state())
 
         self.assertEqual(node['files']['default']['properties'], {
+                        'language': 'default',
                         'default-and-en': 'default',
                         'default-and-properties': 'default',
                         'default-and-properties-and-en': 'default',
@@ -87,6 +94,7 @@ class PropertyDecoratorTest(DocumentPageTestCase):
                 })
 
         self.assertEqual(node['files']['properties']['properties'], {
+                        'language': 'properties',
                         'default-and-en': 'default',
                         'default-and-properties': 'properties',
                         'default-and-properties-and-en': 'properties',
@@ -96,6 +104,7 @@ class PropertyDecoratorTest(DocumentPageTestCase):
                 })
 
         self.assertEqual(node['files']['en']['properties'], {
+                        'language': 'en',
                         'default-and-en': 'en',
                         'default-and-properties': 'properties',
                         'default-and-properties-and-en': 'en',

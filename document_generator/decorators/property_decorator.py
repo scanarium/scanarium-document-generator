@@ -21,4 +21,5 @@ class PropertyDecorator(Decorator):
         properties = copy.deepcopy(state['properties'])
         self.utils.update_dict(
             properties, copy.deepcopy(file['content-properties']))
+        properties['language'] = file['key']
         file['properties'] = properties
