@@ -116,3 +116,12 @@ Each file is represented by a dictionary with the following key/values.
 | `markdown` | MarkdownPropertyExtractorFileDecorator | The markdown part of `raw-content` as string. The `HeaderFileDecorator` adjusts the format of the first line. |
 | `properties` | PropertyDecorator | Merged `content-properties` of the `default`, overruled by those of `properties`, and finally overruled by those of the current file |
 | `raw-content` | DocumentFileParser | The raw file contents as string |
+
+
+### Markdown mangling
+
+A file's markdown gets mangled in a few ways.
+
+1. Properties are cut off from the bottom of the contents. (See `MarkdownPropertyExtractorFileDecorator`)
+1. Occurrences of `{=property(foo)}` are replaced by the value of the property `foo` (See `ValueInjectorFileDecorator`)
+1. The hierarchy level in the title is adjusted and the id is set (See `HeaderFileDecorator`)
