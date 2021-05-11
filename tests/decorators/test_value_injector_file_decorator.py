@@ -128,3 +128,9 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             'baz',
             properties={'foo': 'baz'},
             macros={'bar': 'f$1o'})
+
+    def test_macro_line_break(self):
+        self.assertInjectedMarkdown(
+            '{=macro(foo, bar, baz)}',
+            'bar\nbaz',
+            macros={'foo': '$1\\n$2'})

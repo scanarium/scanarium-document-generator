@@ -20,6 +20,7 @@ class ValueInjectorFileDecorator(FileDecorator):
         value = self.macros[name]
         for i in range(1, len(args)):
             value = value.replace(f'${i}', args[i])
+        value = value.replace('\\n', '\n')
         return value
 
     def decorate_file(self, file, state):

@@ -32,7 +32,7 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
         `<!-- FOOTER-START -->` are used as footer. (Default: None)
 * `macros`: A dict of macros. The keys are the macro names, and the values the
     substitution for the macro. In the macro value, use `$1`, `$2`,… to refer
-    to the first, second,… argument.
+    to the first, second,… argument. And use `\\n` to denote a line-break.
 
 Directories are relative to the current working directory. E.g.: If the
 generator is started from directory `.../foo`, the config file is
