@@ -4,6 +4,7 @@ from .file_decorator import FileDecorator
 from .markdown_property_extractor_file_decorator import \
     MarkdownPropertyExtractorFileDecorator
 from .header_file_decorator import HeaderFileDecorator
+from .value_injector_file_decorator import ValueInjectorFileDecorator
 
 from .node_decorator import NodeDecorator
 from .default_file_node_decorator import DefaultFileNodeDecorator
@@ -22,5 +23,6 @@ __all__ = (
     'MarkdownPropertyExtractorFileDecorator',
     'NodeDecorator',
     'PropertyDecorator',
-    'Utils'
+    'Utils',
+    'ValueInjectorFileDecorator',
     )

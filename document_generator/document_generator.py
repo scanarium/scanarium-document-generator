@@ -9,6 +9,7 @@ from .decorators import IdDecorator
 from .decorators import LevelDecorator
 from .decorators import MarkdownPropertyExtractorFileDecorator
 from .decorators import PropertyDecorator
+from .decorators import ValueInjectorFileDecorator
 
 
 class DocumentGenerator(object):
@@ -27,6 +28,7 @@ class DocumentGenerator(object):
             DefaultFileNodeDecorator(default_l10n),
             PropertyDecorator(),
             IdDecorator(),
+            ValueInjectorFileDecorator(),
             HeaderFileDecorator(),
         ]:
             state = decorator.init_state()
