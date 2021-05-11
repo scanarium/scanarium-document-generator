@@ -7,7 +7,6 @@ class MarkdownPropertyExtractorFileDecorator(FileDecorator):
 
         lines = file['markdown'].split('\n')
 
-        # Trim trailing empty lines
         keep_searching = lines
         while keep_searching:
             line = lines[-1]
@@ -25,10 +24,6 @@ class MarkdownPropertyExtractorFileDecorator(FileDecorator):
             if keep_searching:
                 del lines[-1]
                 keep_searching = lines
-
-        # Trim trailing empty lines again, now that we cho
-        while lines and not lines[-1]:
-            lines = lines[:-1]
 
         file['markdown'] = '\n'.join(lines) + ('\n' if lines else '')
         file['markdown-properties'] = properties
