@@ -69,3 +69,11 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
                 "foo": "QUUUX",
             },
             "foo-QUUUX-baz")
+
+    def test_property_idempotence(self):
+        self.assertInjectedMarkdown(
+            "foo-{=property(bar)}-baz",
+            {
+                "bar": "{=property(bar)}",
+            },
+            "foo-{=property(bar)}-baz")
