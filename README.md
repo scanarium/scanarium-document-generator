@@ -30,6 +30,9 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
     * `html-template-file`: If set, the contents of this file up to a line
         `<!-- HEADER-END -->` is used as header, and contents belowe a line
         `<!-- FOOTER-START -->` are used as footer. (Default: None)
+* `macros`: A dict of macros. The keys are the macro names, and the values the
+    substitution for the macro. In the macro value, use `$1`, `$2`,… to refer
+    to the first, second,… argument.
 
 Directories are relative to the current working directory. E.g.: If the
 generator is started from directory `.../foo`, the config file is
@@ -123,5 +126,16 @@ Each file is represented by a dictionary with the following key/values.
 A file's markdown gets mangled in a few ways.
 
 1. Properties are cut off from the bottom of the contents. (See `MarkdownPropertyExtractorFileDecorator`)
-1. Occurrences of `{=property(foo)}` are replaced by the value of the property `foo` (See `ValueInjectorFileDecorator`)
+1. Values are injected. (See the [Injected values section](#injected-values), and `ValueInjectorFileDecorator`)
 1. The hierarchy level in the title is adjusted and the id is set (See `HeaderFileDecorator`)
+
+#### Injected values
+
+To inject a value into markdown, use `{=func(arg1,arg2, …)}`, where `func`
+denotes the function to arrive at the injected values. Arguments `arg1`,
+`arg2`,… have their wrapping whitespace stripped
+
+| func | description |
+| ---- | ---         |
+| `property` | The property `arg1` from this file's properties gets injected |
+| `macro` | The value of macro `arg1` (see [`macros` in `config.json`](#format-of-configjson) gets injected with args `(args2, args3,…)` as arguments. Note that `arg1` is the macro name, so `arg2` is the first argument to the macro, `arg3` the second, and so on. |

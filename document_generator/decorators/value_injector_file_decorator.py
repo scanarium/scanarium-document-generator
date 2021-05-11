@@ -4,14 +4,23 @@ from .file_decorator import FileDecorator
 
 
 class ValueInjectorFileDecorator(FileDecorator):
-    def __init__(self):
+    def __init__(self, macros={}):
         super().__init__()
+        self.macros = macros
         self.funcs = {
             "property": self.funcProperty,
+            "macro": self.funcMacro,
             }
 
     def funcProperty(self, file, state, args):
         return file['properties'][args[0]]
+
+    def funcMacro(self, file, state, args):
+        name = args[0]
+        value = self.macros[name]
+        for i in range(1, len(args)):
+            value = value.replace(f'${i}', args[i])
+        return value
 
     def decorate_file(self, file, state):
         def replacement(match):
