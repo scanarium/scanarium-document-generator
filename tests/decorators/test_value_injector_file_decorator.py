@@ -77,3 +77,16 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
                 "bar": "{=property(bar)}",
             },
             "foo-{=property(bar)}-baz")
+
+    def test_property_loops(self):
+        self.assertInjectedMarkdown(
+            "foo-{=property(bar)}-baz",
+            {
+                "bar": "{=property(quux)}",
+                "quux1": "{=property(quux2)}",
+                "quux2": "{=property(quux3)}",
+                "quux3": "{=property(quux4)}",
+                "quux4": "{=property(quux1)}",
+                "QUUUX": "{=property(quux)}",
+            },
+            "foo-{=property(quux)}-baz")

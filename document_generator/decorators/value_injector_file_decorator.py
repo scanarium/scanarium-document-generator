@@ -27,12 +27,12 @@ class ValueInjectorFileDecorator(FileDecorator):
 
             return ret
 
-        before = ''
-        after = file['markdown']
-        while before != after:
-            before = after
-            after = re.sub(
+        old_values = []
+        current = file['markdown']
+        while current not in old_values:
+            old_values.append(current)
+            current = re.sub(
                 r'{\s*=\s*([a-z]+)\s*\(([^){]*)\)\s*}',
                 replacement,
-                before)
-        file['markdown'] = after
+                current)
+        file['markdown'] = current
