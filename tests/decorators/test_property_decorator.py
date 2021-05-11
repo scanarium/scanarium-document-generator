@@ -113,3 +113,105 @@ class PropertyDecoratorTest(DocumentPageTestCase):
                         'only-en': 'en',
                         'only-properties': 'properties',
                 })
+
+    def test_inheritance(self):
+        node11 = {
+            'files': {
+                'en': {
+                    'key': 'en',
+                    'content-properties': {
+                        'node11-en': 'node11-en',
+                        }},
+                'default': {
+                    'key': 'default',
+                    'content-properties': {
+                        'node11-default': 'node11-default',
+                        'node1-overriden-by-node11': 'node11-default',
+                        }},
+            },
+            'subnodes': [],
+        }
+
+        node12 = {
+            'files': {
+                'en': {
+                    'key': 'en',
+                    'content-properties': {
+                        'node12-en': 'node12-en',
+                        }},
+                'default': {
+                    'key': 'default',
+                    'content-properties': {
+                        'node12-default': 'node12-default',
+                        'node1-overriden-by-node12': 'node12-default',
+                        }},
+            },
+            'subnodes': [],
+        }
+
+        node1 = {
+            'files': {
+                'en': {
+                    'key': 'en',
+                    'content-properties': {
+                        'node1-en': 'node1-en',
+                        }},
+                'default': {
+                    'key': 'default',
+                    'content-properties': {
+                        'node1-default': 'node1-default',
+                        'node1-overriden-by-node11': 'node1-default',
+                        'node1-overriden-by-node12': 'node1-default',
+                        }},
+            },
+            'subnodes': [node11, node12],
+        }
+
+        decorator = PropertyDecorator()
+        decorator.run(node1, decorator.init_state())
+
+        self.assertEqual(node1['files']['en']['properties'], {
+                'language': 'en',
+                'node1-default': 'node1-default',
+                'node1-en': 'node1-en',
+                'node1-overriden-by-node11': 'node1-default',
+                'node1-overriden-by-node12': 'node1-default',
+                })
+        self.assertEqual(node1['files']['default']['properties'], {
+                'language': 'default',
+                'node1-default': 'node1-default',
+                'node1-overriden-by-node11': 'node1-default',
+                'node1-overriden-by-node12': 'node1-default',
+                })
+
+        self.assertEqual(node11['files']['en']['properties'], {
+                'language': 'en',
+                'node1-default': 'node1-default',
+                'node11-default': 'node11-default',
+                'node11-en': 'node11-en',
+                'node1-overriden-by-node11': 'node11-default',
+                'node1-overriden-by-node12': 'node1-default',
+                })
+        self.assertEqual(node11['files']['default']['properties'], {
+                'language': 'default',
+                'node1-default': 'node1-default',
+                'node11-default': 'node11-default',
+                'node1-overriden-by-node11': 'node11-default',
+                'node1-overriden-by-node12': 'node1-default',
+                })
+
+        self.assertEqual(node12['files']['en']['properties'], {
+                'language': 'en',
+                'node1-default': 'node1-default',
+                'node12-default': 'node12-default',
+                'node12-en': 'node12-en',
+                'node1-overriden-by-node11': 'node1-default',
+                'node1-overriden-by-node12': 'node12-default',
+                })
+        self.assertEqual(node12['files']['default']['properties'], {
+                'language': 'default',
+                'node1-default': 'node1-default',
+                'node12-default': 'node12-default',
+                'node1-overriden-by-node11': 'node1-default',
+                'node1-overriden-by-node12': 'node12-default',
+                })
