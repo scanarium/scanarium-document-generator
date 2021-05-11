@@ -14,5 +14,5 @@ class DocumentFileParser(object):
         with open(file_name, 'rt') as f:
             raw_content = f.read()
 
-        ret['markdown'] = raw_content
+        ret['raw-content'] = raw_content
         return ret

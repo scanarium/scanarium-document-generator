@@ -20,4 +20,4 @@ class DocumentFileParserTest(DocumentPageTestCase):
 
     def test_markdown(self):
         actual = self.parse_fixture('only-markdown')
-        self.assertEqual(actual['markdown'], '# Section foo\n\nbar\n')
+        self.assertEqual(actual['raw-content'], '# Section foo\n\nbar\n')

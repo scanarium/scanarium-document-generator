@@ -5,7 +5,7 @@ class MarkdownPropertyExtractorFileDecorator(FileDecorator):
     def decorate_file(self, file, state):
         properties = {}
 
-        lines = file['markdown'].split('\n')
+        lines = file['raw-content'].split('\n')
 
         keep_searching = lines
         while keep_searching:
@@ -26,4 +26,4 @@ class MarkdownPropertyExtractorFileDecorator(FileDecorator):
                 keep_searching = lines
 
         file['markdown'] = '\n'.join(lines) + ('\n' if lines else '')
-        file['markdown-properties'] = properties
+        file['content-properties'] = properties
