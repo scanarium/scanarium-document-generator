@@ -34,6 +34,6 @@ class ValueInjectorFileDecorator(FileDecorator):
         while counter:
             counter = 0
             file['markdown'] = re.sub(
-                r'{\s*=\s*([a-z]+)\s*\(([^)]*)\)\s*}',
+                r'{\s*=\s*([a-z]+)\s*\(([^){]*)\)\s*}',
                 replacement,
                 file['markdown'])

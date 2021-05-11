@@ -60,3 +60,12 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
                 "quuux": "QUUUX",
             },
             "foo-QUUUX-baz")
+
+    def test_property_indirect(self):
+        self.assertInjectedMarkdown(
+            "foo-{=property({=property(bar)})}-baz",
+            {
+                "bar": "foo",
+                "foo": "QUUUX",
+            },
+            "foo-QUUUX-baz")
