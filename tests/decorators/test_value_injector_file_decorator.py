@@ -134,3 +134,21 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             '{=macro(foo, bar, baz)}',
             'bar\nbaz',
             macros={'foo': '$1\\n$2'})
+
+    def test_macro_wildcard_no_arguments(self):
+        self.assertInjectedMarkdown(
+            '{=macro(foo)}',
+            '||',
+            macros={'foo': '|$*|'})
+
+    def test_macro_wildcard_single_argument(self):
+        self.assertInjectedMarkdown(
+            '{=macro(foo, bar)}',
+            '|bar|',
+            macros={'foo': '|$*|'})
+
+    def test_macro_wildcard_multiple_arguments(self):
+        self.assertInjectedMarkdown(
+            '{=macro(foo, bar,baz, quux,  quuux)}',
+            '|bar, baz, quux, quuux|',
+            macros={'foo': '|$*|'})

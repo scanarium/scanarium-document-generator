@@ -18,8 +18,15 @@ class ValueInjectorFileDecorator(FileDecorator):
     def funcMacro(self, file, state, args):
         name = args[0]
         value = self.macros[name]
+
+        # Inject positional arguments
         for i in range(1, len(args)):
             value = value.replace(f'${i}', args[i])
+
+        # Inject wildcard argument
+        value = value.replace('$*', ', '.join(args[1:]))
+
+        # Convert encoded JavaScript line-breaks into real line-breaks
         value = value.replace('\\n', '\n')
         return value
 
