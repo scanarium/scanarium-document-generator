@@ -35,19 +35,6 @@ def parse_arguments(conf):
     return parser.parse_args()
 
 
-def update_dict(target, source, merge_lists=False):
-    for key, value in source.items():
-        if isinstance(value, collections.abc.Mapping):
-            repl = update_dict(target.get(key, {}), value)
-            target[key] = repl
-        elif merge_lists and isinstance(value, list) \
-                and isinstance(target.get(key, 0), list):
-            target[key] += value
-        else:
-            target[key] = source[key]
-    return target
-
-
 def object_string_replace(obj, needle, replacement):
     if isinstance(obj, collections.abc.Mapping):
         ret = {}
@@ -69,14 +56,14 @@ if __name__ == "__main__":
         'default_l10n': 'en',
         'additional_l10ns': '',
     }
+    utils = document_generator.Utils()
 
     args = parse_arguments(conf)
-
     if args.config is not None:
         with open(args.config, 'rt') as f:
             config_text_content = f.read()
         extra_config = json.loads(config_text_content)
-        conf = update_dict(conf, extra_config)
+        conf = utils.update_dict(conf, extra_config)
 
         conf_dir = os.path.dirname(os.path.abspath(args.config))
         conf = object_string_replace(conf, '{conf_dir}', conf_dir)

@@ -5,6 +5,7 @@ from .document_node_parser import DocumentNodeParser
 from .markdown_renderer import MarkdownRenderer
 from .parser import Parser
 from .resource_exporter import ResourceExporter
+from .decorators import Utils
 
 __all__ = (
     'AllInOneExporter',
@@ -14,4 +15,5 @@ __all__ = (
     'MarkdownRenderer',
     'Parser',
     'ResourceExporter',
+    'Utils',
     )

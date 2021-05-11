@@ -9,6 +9,7 @@ from .node_decorator import NodeDecorator
 from .default_file_node_decorator import DefaultFileNodeDecorator
 from .id_decorator import IdDecorator
 from .level_decorator import LevelDecorator
+from .utils import Utils
 
 __all__ = (
     'Decorator',
@@ -19,4 +20,5 @@ __all__ = (
     'LevelDecorator',
     'MarkdownPropertyExtractorFileDecorator',
     'NodeDecorator',
+    'Utils'
     )
