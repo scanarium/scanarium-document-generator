@@ -1,16 +1,22 @@
+import os
+
 from tests import DocumentPageTestCase
 from document_generator.decorators import ValueInjectorFileDecorator
+
+FIXTURE_DIR = os.path.join('tests', 'fixtures',
+                           'value_injector_file_decorator')
 
 
 class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
     def assertInjectedMarkdown(self, markdown, expected, properties={},
-                               macros={}):
+                               macros={}, external_functions={}):
         file = {
             'markdown': markdown,
             'properties': properties,
             }
 
-        decorator = ValueInjectorFileDecorator(macros=macros)
+        decorator = ValueInjectorFileDecorator(
+            macros=macros, external_functions=external_functions)
         state = decorator.init_state()
         decorator.decorate_file(file, state)
 
@@ -152,3 +158,25 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             '{=macro(foo, bar,baz, quux,  quuux)}',
             '|bar, baz, quux, quuux|',
             macros={'foo': '|$*|'})
+
+    def test_external_function_loading_single(self):
+        self.assertInjectedMarkdown(
+            '{=upper(foo)}',
+            'FOO',
+            external_functions={'upper': {
+                    'file': os.path.join(FIXTURE_DIR, 'upper_lower.py'),
+                    'name': 'upper'},
+                                })
+
+    def test_external_function_loading_mixed(self):
+        self.assertInjectedMarkdown(
+            '{=lower({=property(foo)})} {=upper({=property(foo)})}',
+            'bar BAR',
+            properties={'foo': 'BaR'},
+            external_functions={'upper': {
+                    'file': os.path.join(FIXTURE_DIR, 'upper_lower.py'),
+                    'name': 'upper'},
+                                'lower': {
+                    'file': os.path.join(FIXTURE_DIR, 'upper_lower.py'),
+                    'name': 'lower'},
+                                })

@@ -1,16 +1,33 @@
 import re
 
+from importlib.machinery import SourceFileLoader
+from inspect import getmembers, isfunction
+
 from .file_decorator import FileDecorator
 
 
 class ValueInjectorFileDecorator(FileDecorator):
-    def __init__(self, macros={}):
+    def __init__(self, macros={}, external_functions={}):
         super().__init__()
         self.macros = macros
         self.funcs = {
             "property": self.funcProperty,
             "macro": self.funcMacro,
             }
+
+        for imported_name, import_spec in external_functions.items():
+            self.funcs[imported_name] = self.loadExternalFunction(
+                imported_name, import_spec)
+
+    def loadExternalFunction(self, imported_name, import_spec):
+        ret = None
+
+        module = SourceFileLoader(f'value_injector_{imported_name}',
+                                  import_spec['file']).load_module()
+        for member_name, member_value in getmembers(module, isfunction):
+            if member_name == import_spec['name']:
+                ret = member_value
+        return ret
 
     def funcProperty(self, file, state, args):
         return file['properties'][args[0]]

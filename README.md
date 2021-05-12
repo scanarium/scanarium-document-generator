@@ -30,6 +30,29 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
     * `html-template-file`: If set, the contents of this file up to a line
         `<!-- HEADER-END -->` is used as header, and contents belowe a line
         `<!-- FOOTER-START -->` are used as footer. (Default: None)
+* `external_functions`: A dict of external functions to use in markdown. The
+    dict's keys are the names under which the functions get loaded, and the value
+    is a dictionary with the following key/values.
+    * `file`: The path to the Python file to import from.
+    * `name`: The name of the global function in `file` to import.
+
+    So for example using
+    ```
+    ...,
+    "external_functions": {
+        "foo": {
+            "file": "path/to/python/source.py",
+            "name": "quux"
+        }
+    },
+    ....
+    ```
+    will allow to use `{=foo(bar,baz)}` in markdown and would get replaced by
+    the return value of running the global function `quux` from
+    `path/to/python/source.py` with the parameters
+    `(file_dict, state, ["bar", "baz"])`, where `file_dict` is the
+    [file dict](#file) for the current file, and state is the current state for
+    `ValueInjectorFileDecorator`.
 * `macros`: A dict of macros. The keys are the macro names, and the values the
     substitution for the macro. In the macro value use:
     * `$1`, `$2`,… to refer to the first, second,… argument.

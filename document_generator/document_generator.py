@@ -28,7 +28,10 @@ class DocumentGenerator(object):
             DefaultFileNodeDecorator(default_l10n),
             PropertyDecorator(),
             IdDecorator(),
-            ValueInjectorFileDecorator(macros=conf.get('macros', {})),
+            ValueInjectorFileDecorator(
+                macros=conf.get('macros', {}),
+                external_functions=conf.get('external_functions', {}),
+                ),
             HeaderFileDecorator(),
         ]:
             state = decorator.init_state()
