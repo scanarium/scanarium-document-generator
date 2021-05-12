@@ -180,3 +180,53 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
                     'file': os.path.join(FIXTURE_DIR, 'upper_lower.py'),
                     'name': 'lower'},
                                 })
+
+    def test_substring_empty(self):
+        self.assertInjectedMarkdown(
+            '{=substring( ,0, 1)}',
+            '')
+
+    def test_substring_single_positive_start_positive_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, 3, 9)}',
+            'BarBaz')
+
+    def test_substring_single_positive_start_negative_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, 3, -4)}',
+            'BarBaz')
+
+    def test_substring_single_positive_start_no_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, 6, )}',
+            'BazQuux')
+
+    def test_substring_single_negative_start_positive_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, -10, 9)}',
+            'BarBaz')
+
+    def test_substring_single_negative_start_negative_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, -10, -4)}',
+            'BarBaz')
+
+    def test_substring_single_negative_start_no_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, -7, )}',
+            'BazQuux')
+
+    def test_substring_single_no_start_positive_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, , 3)}',
+            'Foo')
+
+    def test_substring_single_no_start_negative_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, , 4)}',
+            'FooB')
+
+    def test_substring_single_no_start_no_end(self):
+        self.assertInjectedMarkdown(
+            '{=substring(FooBarBazQuux, , )}',
+            'FooBarBazQuux')

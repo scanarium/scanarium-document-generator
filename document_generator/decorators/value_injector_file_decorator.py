@@ -13,6 +13,7 @@ class ValueInjectorFileDecorator(FileDecorator):
         self.funcs = {
             "property": self.funcProperty,
             "macro": self.funcMacro,
+            "substring": self.funcSubstring,
             }
 
         for imported_name, import_spec in external_functions.items():
@@ -46,6 +47,11 @@ class ValueInjectorFileDecorator(FileDecorator):
         # Convert encoded JavaScript line-breaks into real line-breaks
         value = value.replace('\\n', '\n')
         return value
+
+    def funcSubstring(self, file, state, args):
+        end = int(args[-1]) if args[-1] else None
+        start = int(args[-2]) if args[-2] else None
+        return ', '.join(args[0:-2])[start:end]
 
     def decorate_file(self, file, state):
         def replacement(match):
