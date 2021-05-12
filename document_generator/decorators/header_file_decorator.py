@@ -9,7 +9,7 @@ class HeaderFileDecorator(FileDecorator):
             if not header:
                 header = file['id']
             header = ('#' * file['level']) + ' ' + header
-            attribute_str = f"#{file['id']}"
+            attribute_str = f"#{file['id']} class=document-generator-node"
             if '{:' in header:
                 left, right = header.split('{:', 1)
                 header = left + '{: ' + attribute_str + ' ' + right
