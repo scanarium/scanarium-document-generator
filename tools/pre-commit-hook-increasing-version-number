@@ -1,0 +1,73 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+SOURCE_DIR=source
+
+WRONG_FILE_COUNT=0
+
+error() {
+    echo "ERROR" "$@" >&2
+    exit 1
+}
+
+report_file() {
+    echo "$@"
+    WRONG_FILE_COUNT=$((WRONG_FILE_COUNT + 1))
+}
+
+process_file() {
+    local FILE="$1"
+    local OLD_VERSION="$2"
+    local NEW_VERSION="$3"
+    if [ -n "$FILE" ]
+    then
+        if [ "$NEW_VERSION" = "?" ]
+        then
+            report_file "File '$FILE' changed, but could not find new, changed version number"
+        else
+            if [ "$OLD_VERSION" != "?" ]
+            then
+                if [ "1" != "$(bc <<<"$NEW_VERSION > $OLD_VERSION" )" ]
+                then
+                    report_file "File '$FILE' changed, but version number did not increase (old: $OLD_VERSION, new: $NEW_VERSION)"
+                fi
+            fi
+        fi
+    fi
+}
+
+
+FILE=
+OLD_VERSION=?
+NEW_VERSION=?
+while read LINE
+do
+    if [ "${LINE:0:3}" == "+++" ]
+    then
+        process_file "$FILE" "$OLD_VERSION" "$NEW_VERSION"
+        FILE=${LINE:5}
+        OLD_VERSION=?
+        NEW_VERSION=?
+    elif [ "${LINE:1:8}" == "version:" ]
+    then
+        VERSION="${LINE:9}"
+        if [ "${LINE:0:1}" == "-" ]
+        then
+            OLD_VERSION="$VERSION"
+        elif [ "${LINE:0:1}" == "+" ]
+        then
+            NEW_VERSION="$VERSION"
+        else
+            error "Unparsable line '$LINE'"
+        fi
+    else
+        error "Unknown line '$LINE'"
+    fi
+done < <(git diff --cached | grep '^\([+-]version:\|+++ b/'"$SOURCE_DIR"'/\)' || true ; echo "+++ END" )
+
+if [ "$WRONG_FILE_COUNT" -gt 0 ]
+then
+    error "Found $WRONG_FILE_COUNT files with version problems"
+fi
