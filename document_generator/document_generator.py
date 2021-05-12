@@ -1,6 +1,7 @@
 import os
 
 from .all_in_one_exporter import AllInOneExporter
+from .build_properties import BuildProperties
 from .parser import Parser
 from .resource_exporter import ResourceExporter
 from .decorators import DefaultFileNodeDecorator
@@ -26,7 +27,7 @@ class DocumentGenerator(object):
             MarkdownPropertyExtractorFileDecorator(),
             LevelDecorator(),
             DefaultFileNodeDecorator(default_l10n),
-            PropertyDecorator(),
+            PropertyDecorator(BuildProperties(markdown_dir).getProperties()),
             IdDecorator(),
             ValueInjectorFileDecorator(
                 macros=conf.get('macros', {}),

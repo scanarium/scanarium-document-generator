@@ -109,6 +109,11 @@ Common properties are:
     increase the number's decimal places, so tooling can see that translations
     do not need to get updated. If a file is missing the `version` tag, it is
     assumed to be `1`.
+* `build_seconds_since_epoch`: The number of seconds passed since 1970-01-01
+    until the build started.
+* `build_day_iso`: The day when the build started, in ISO format.
+* `build_git_description`: A description of the git repository when the build
+    started.
 
 ## Data model
 

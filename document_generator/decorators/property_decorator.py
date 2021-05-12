@@ -5,8 +5,9 @@ from .utils import Utils
 
 
 class PropertyDecorator(Decorator):
-    def __init__(self):
+    def __init__(self, initial_state={}):
         self.utils = Utils()
+        self.initial_state = initial_state
 
     def init_state(self):
         state = super().init_state()
@@ -15,9 +16,9 @@ class PropertyDecorator(Decorator):
         # the hierarchy. The current node's properties are at the end of the
         # list.
         #
-        # Preparing empty properties list to act as parent properties
+        # Preparing initial properties to act as parent properties
         # for root node.
-        state['properties-list'] = [{}]
+        state['properties-list'] = [copy.deepcopy(self.initial_state)]
         return state
 
     def decorate_node_enter(self, node, state):

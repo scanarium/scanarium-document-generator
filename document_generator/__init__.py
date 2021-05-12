@@ -1,4 +1,5 @@
 from .all_in_one_exporter import AllInOneExporter
+from .build_properties import BuildProperties
 from .document_file_parser import DocumentFileParser
 from .document_generator import DocumentGenerator
 from .document_node_parser import DocumentNodeParser
@@ -9,6 +10,7 @@ from .decorators import Utils
 
 __all__ = (
     'AllInOneExporter',
+    'BuildProperties',
     'DocumentFileParser',
     'DocumentGenerator',
     'DocumentNodeParser',

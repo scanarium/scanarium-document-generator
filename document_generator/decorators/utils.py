@@ -1,4 +1,5 @@
 import collections.abc
+import subprocess
 
 
 class Utils(object):
@@ -13,3 +14,15 @@ class Utils(object):
             else:
                 target[key] = source[key]
         return target
+
+    def run_command(self, command):
+        process = subprocess.run(command,
+                                 check=True,
+                                 timeout=3,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 universal_newlines=True)
+        return {
+            'stdout': process.stdout,
+            'stderr': process.stderr,
+        }

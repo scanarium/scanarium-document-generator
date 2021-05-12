@@ -1,5 +1,6 @@
 import os
-import subprocess
+
+import document_generator
 
 from .environment import DocumentPageTestCase
 
@@ -7,17 +8,9 @@ FIXTURE_DIR = os.path.join('tests', 'fixtures', 'document-node-parser')
 
 
 class DocumentGeneratorTest(DocumentPageTestCase):
-    def run_command(self, command):
-        process = subprocess.run(command,
-                                 check=True,
-                                 timeout=3,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True)
-        return {
-            'stdout': process.stdout,
-            'stderr': process.stderr,
-        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.utils = document_generator.Utils()
 
     def test_simple(self):
         with self.tempDir() as dir:
@@ -27,7 +20,7 @@ class DocumentGeneratorTest(DocumentPageTestCase):
                 '--target', dir,
                 '--additional-localizations', 'de',
             ]
-            self.run_command(command)
+            self.utils.run_command(command)
 
             with open(os.path.join(dir, 'all.html.en')) as f:
                 contents = f.read()
