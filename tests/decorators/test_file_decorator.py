@@ -8,10 +8,12 @@ class StubDecorator(FileDecorator):
         self.visited = []
 
     def init_state(self):
-        return {'number': 42}
+        state = super().init_state()
+        state['number'] = 42
+        return state
 
     def mark_visited(self, action, name, state):
-        self.visited.append(f'{action}-{name} (state: {state})')
+        self.visited.append(f'{action}-{name} (state: {state["number"]})')
 
     def decorate_file(self, node, state):
         self.mark_visited('file', node['markdown'], state)
@@ -60,8 +62,8 @@ class FileDecoratorTest(DocumentPageTestCase):
         decorator.run(node1, state)
 
         self.assertEqual(decorator.visited, [
-                "file-1-barEn (state: {'number': 42})",
-                "file-1-barEo (state: {'number': 43})",
-                "file-111-fooDe (state: {'number': 44})",
-                "file-111-fooEn (state: {'number': 45})",
+                "file-1-barEn (state: 42)",
+                "file-1-barEo (state: 43)",
+                "file-111-fooDe (state: 44)",
+                "file-111-fooEn (state: 45)",
                 ])

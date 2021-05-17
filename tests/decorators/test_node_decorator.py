@@ -8,10 +8,12 @@ class StubDecorator(NodeDecorator):
         self.visited = []
 
     def init_state(self):
-        return {'number': 42}
+        state = super().init_state()
+        state['number'] = 42
+        return state
 
     def mark_visited(self, action, name, state):
-        self.visited.append(f'{action}-{name} (state: {state})')
+        self.visited.append(f'{action}-{name} (state: {state["number"]})')
 
     def decorate_node(self, node, state):
         self.mark_visited('node', node['name'], state)
@@ -60,8 +62,8 @@ class NodeDecoratorTest(DocumentPageTestCase):
         decorator.run(node1, state)
 
         self.assertEqual(decorator.visited, [
-                "node-node1 (state: {'number': 42})",
-                "node-node11 (state: {'number': 43})",
-                "node-node111 (state: {'number': 44})",
-                "node-node12 (state: {'number': 45})",
+                "node-node1 (state: 42)",
+                "node-node11 (state: 43)",
+                "node-node111 (state: 44)",
+                "node-node12 (state: 45)",
                 ])

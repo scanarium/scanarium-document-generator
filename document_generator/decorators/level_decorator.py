@@ -3,7 +3,9 @@ from .decorator import Decorator
 
 class LevelDecorator(Decorator):
     def init_state(self):
-        return {'level': 0}
+        state = super().init_state()
+        state['level'] = 0
+        return state
 
     def decorate_node_enter(self, node, state):
         state['level'] += 1

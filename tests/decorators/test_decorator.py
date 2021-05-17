@@ -8,10 +8,12 @@ class StubDecorator(Decorator):
         self.visited = []
 
     def init_state(self):
-        return {'number': 42}
+        state = super().init_state()
+        state['number'] = 42
+        return state
 
     def mark_visited(self, action, name, state):
-        self.visited.append(f'{action}-{name} (state: {state})')
+        self.visited.append(f'{action}-{name} (state: {state["number"]})')
 
     def decorate_node_enter(self, node, state):
         state['number'] += 1
@@ -67,16 +69,16 @@ class DecoratorTest(DocumentPageTestCase):
         decorator.run(node1, state)
 
         self.assertEqual(decorator.visited, [
-                "node-enter-node1 (state: {'number': 43})",
-                "file-1-barEn (state: {'number': 43})",
-                "file-1-barEo (state: {'number': 43})",
-                "node-enter-node11 (state: {'number': 44})",
-                "node-enter-node111 (state: {'number': 45})",
-                "file-111-fooDe (state: {'number': 45})",
-                "file-111-fooEn (state: {'number': 45})",
-                "node-exit-node111 (state: {'number': 45})",
-                "node-exit-node11 (state: {'number': 44})",
-                "node-enter-node12 (state: {'number': 44})",
-                "node-exit-node12 (state: {'number': 44})",
-                "node-exit-node1 (state: {'number': 43})",
+                "node-enter-node1 (state: 43)",
+                "file-1-barEn (state: 43)",
+                "file-1-barEo (state: 43)",
+                "node-enter-node11 (state: 44)",
+                "node-enter-node111 (state: 45)",
+                "file-111-fooDe (state: 45)",
+                "file-111-fooEn (state: 45)",
+                "node-exit-node111 (state: 45)",
+                "node-exit-node11 (state: 44)",
+                "node-enter-node12 (state: 44)",
+                "node-exit-node12 (state: 44)",
+                "node-exit-node1 (state: 43)",
                 ])
