@@ -21,7 +21,7 @@ process_file() {
     local FILE="$1"
     local OLD_VERSION="$2"
     local NEW_VERSION="$3"
-    if [ -n "$FILE" ]
+    if [ -n "$FILE" -a "$(basename "$FILE")" != "properties.md" ]
     then
         if [ "$NEW_VERSION" = "?" ]
         then
