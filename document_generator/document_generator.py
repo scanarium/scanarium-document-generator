@@ -1,4 +1,5 @@
 import os
+import sys
 
 from .all_in_one_exporter import AllInOneExporter
 from .build_properties import BuildProperties
@@ -14,7 +15,15 @@ from .decorators import ValueInjectorFileDecorator
 
 
 class DocumentGenerator(object):
-    def run(self, conf):
+    def print_message(self, message, target=sys.stderr):
+        print('', file=target)
+        print(message['kind'], file=target)
+        print('  node:' + message['node']['name'], file=target)
+        if 'file' in message:
+            print('  file:' + message['file']['key'], file=target)
+        print('  ' + message['text'], file=target)
+
+    def run(self, conf, stderr=sys.stderr):
         markdown_dir = conf['source']
         output_dir = conf['target']
         default_l10n = conf['default_l10n']
@@ -23,6 +32,7 @@ class DocumentGenerator(object):
         parser = Parser()
         root_node = parser.parse(markdown_dir)
 
+        errors = 0
         for decorator in [
             MarkdownPropertyExtractorFileDecorator(),
             LevelDecorator(),
@@ -37,6 +47,10 @@ class DocumentGenerator(object):
         ]:
             state = decorator.init_state()
             decorator.run(root_node, state)
+            for message in decorator.get_messages(state):
+                self.print_message(message, target=stderr)
+                if message['kind'] != 'warning':
+                    errors += 1
 
         os.makedirs(output_dir, exist_ok=True)
 
@@ -44,3 +58,5 @@ class DocumentGenerator(object):
 
         AllInOneExporter(root_node, output_dir, default_l10n, other_l10ns,
                          conf.get('exporter', [])).export()
+
+        return errors

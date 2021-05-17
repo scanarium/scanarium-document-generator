@@ -1,3 +1,4 @@
+import io
 import os
 
 from .environment import DocumentPageTestCase
@@ -11,7 +12,7 @@ class DocumentGeneratorTest(DocumentPageTestCase):
         with self.tempDir() as dir:
             fixture_dir = os.path.join(FIXTURE_DIR, 'simple')
             generator = DocumentGenerator()
-            generator.run({
+            errors = generator.run({
                     'source': fixture_dir,
                     'target': dir,
                     'default_l10n': 'en',
@@ -29,3 +30,27 @@ class DocumentGeneratorTest(DocumentPageTestCase):
             self.assertIn('<html', contents)
             self.assertIn('Kapitel 111', contents)
             self.assertIn('Chapter 2', contents)
+
+            self.assertEqual(0, errors)
+
+    def test_missing_id(self):
+        with self.tempDir() as dir:
+            fixture_dir = os.path.join(FIXTURE_DIR, 'missing-id')
+            generator = DocumentGenerator()
+            capture = io.StringIO()
+            errors = generator.run({
+                    'source': fixture_dir,
+                    'target': dir,
+                    'default_l10n': 'en',
+                    'additional_l10ns': ['de'],
+                    }, stderr=capture)
+
+            with open(os.path.join(dir, 'all.html.en')) as f:
+                contents = f.read()
+            self.assertIn('id="anonymous"', contents)
+            self.assertIn('id="chapter-2"', contents)
+
+            stderr = capture.getvalue()
+            self.assertIn('error', stderr)
+            self.assertIn('missing', stderr)
+            self.assertEqual(1, errors)

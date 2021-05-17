@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import document_generator
 
@@ -37,3 +38,20 @@ class DocumentGeneratorTest(DocumentPageTestCase):
                           'Kapitel 11', contents)
             self.assertIn('Kapitel 111', contents)
             self.assertIn('Chapter 2', contents)
+
+    def test_missing_id(self):
+        with self.tempDir() as dir:
+            command = [
+                os.path.join('.', 'generator.py'),
+                '--source', os.path.join(FIXTURE_DIR, 'missing-id'),
+                '--target', dir,
+                '--additional-localizations', 'de',
+            ]
+            with self.assertRaises(subprocess.CalledProcessError) as cm:
+                self.utils.run_command(command)
+
+            exception = cm.exception
+            stderr = exception.stderr
+            self.assertIn('error', stderr)
+            self.assertIn('missing', stderr)
+            self.assertEqual(1, exception.returncode)

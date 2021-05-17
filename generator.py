@@ -4,6 +4,7 @@ import argparse
 import collections.abc
 import json
 import os
+import sys
 
 import document_generator
 
@@ -85,4 +86,7 @@ if __name__ == "__main__":
             conf['additional_l10ns'] = []
 
     generator = document_generator.DocumentGenerator()
-    generator.run(conf)
+    errors = generator.run(conf)
+
+    exit_code = 1 if errors else 0
+    sys.exit(exit_code)
