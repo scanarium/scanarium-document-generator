@@ -2,7 +2,7 @@ from tests import DocumentPageTestCase
 from document_generator.decorators import IdDecorator
 
 
-class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
+class IdDecoratorTest(DocumentPageTestCase):
     def test_no_files(self):
         node = {
             'files': {},
