@@ -17,8 +17,8 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
     def test_plain(self):
         node = {
             'files': {
-                'default': {'content-properties': {'id': 'id-foo'}},
-                'en': {'content-properties': {}},
+                'default': {'properties': {'id': 'id-foo'}},
+                'en': {'properties': {}},
             },
             'subnodes': [],
         }
@@ -29,7 +29,7 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
         self.assertEqual(node['files'], {
                 'default': {
                     'id': 'id-foo',
-                    'content-properties': {'id': 'id-foo'}
+                    'properties': {'id': 'id-foo'}
                 },
-                'en': {'id': 'id-foo', 'content-properties': {}},
+                'en': {'id': 'id-foo', 'properties': {}},
                 })
