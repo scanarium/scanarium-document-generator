@@ -13,7 +13,8 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
         decorator = HeaderFileDecorator()
         decorator.decorate_file(file, decorator.init_state())
 
-        self.assertEqual(file['markdown'], '# foo {: #foo}')
+        self.assertEqual(file['markdown'],
+                         '# foo {: #foo class=document-generator-node}')
 
     def test_plain(self):
         file = {
@@ -25,7 +26,9 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
         decorator = HeaderFileDecorator()
         decorator.decorate_file(file, decorator.init_state())
 
-        self.assertEqual(file['markdown'], '### Title foo {: #idFoo}\n\nbar')
+        self.assertEqual(file['markdown'],
+                         '### Title foo {: #idFoo '
+                         'class=document-generator-node}\n\nbar')
 
     def test_attributes_already_present(self):
         file = {
@@ -38,7 +41,8 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
         decorator.decorate_file(file, decorator.init_state())
 
         self.assertEqual(file['markdown'],
-                         '# Title foo {: #idFoo key=value}\n\nbar')
+                         '# Title foo {: #idFoo class=document-generator-node '
+                         'key=value}\n\nbar')
 
     def test_attributes_already_open_no_end(self):
         file = {
@@ -51,4 +55,5 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
         decorator.decorate_file(file, decorator.init_state())
 
         self.assertEqual(file['markdown'],
-                         '# Title foo {: #idFoo key=value}\n\nbar')
+                         '# Title foo {: #idFoo class=document-generator-node '
+                         'key=value}\n\nbar')
