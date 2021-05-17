@@ -10,9 +10,13 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
             }
 
         decorator = IdDecorator()
-        decorator.run(node, decorator.init_state())
+        state = decorator.init_state()
+        decorator.run(node, state)
 
         self.assertEqual(node['files'], {})
+
+        messages = decorator.get_messages(state)
+        self.assertEqual(len(messages), 0)
 
     def test_plain(self):
         node = {
@@ -24,7 +28,8 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
         }
 
         decorator = IdDecorator()
-        decorator.run(node, decorator.init_state())
+        state = decorator.init_state()
+        decorator.run(node, state)
 
         self.assertEqual(node['files'], {
                 'default': {
@@ -33,3 +38,30 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
                 },
                 'en': {'id': 'id-foo', 'properties': {}},
                 })
+
+        messages = decorator.get_messages(state)
+        self.assertEqual(len(messages), 0)
+
+    def test_missing_id(self):
+        node = {
+            'name': 'foo',
+            'files': {
+                'default': {'properties': {'foo': 'bar'}},
+                'en': {'properties': {}},
+            },
+            'subnodes': [],
+        }
+
+        decorator = IdDecorator()
+        state = decorator.init_state()
+        decorator.run(node, state)
+
+        self.assertEqual(node['files'], {
+                'default': {'id': 'anonymous', 'properties': {'foo': 'bar'}},
+                'en': {'id': 'anonymous', 'properties': {}},
+                })
+
+        messages = decorator.get_messages(state)
+        self.assertIn('missing', messages[0]['text'])
+        self.assertEqual(messages[0]['kind'], 'error')
+        self.assertEqual(len(messages), 1)
