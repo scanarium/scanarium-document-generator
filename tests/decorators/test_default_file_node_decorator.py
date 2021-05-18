@@ -20,7 +20,7 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
     def test_single(self):
         node = {
             'files': {
-                'en': 'fileEn',
+                'en': {'name': 'fileEn'},
                 },
             'subnodes': [],
             }
@@ -28,15 +28,15 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
         self.decorate(node)
 
         self.assertEqual(node['files'], {
-                'default': 'fileEn',
-                'en': 'fileEn',
+                'default': {'name': 'fileEn', 'is-default': True},
+                'en': {'name': 'fileEn'},
         })
 
     def test_multiple(self):
         node = {
             'files': {
-                'de': 'fileDe',
-                'en': 'fileEn',
+                'de': {'name': 'fileDe'},
+                'en': {'name': 'fileEn'},
                 },
             'subnodes': [],
             }
@@ -44,26 +44,26 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
         self.decorate(node)
 
         self.assertEqual(node['files'], {
-                'de': 'fileDe',
-                'default': 'fileEn',
-                'en': 'fileEn',
+                'de': {'name': 'fileDe'},
+                'default': {'name': 'fileEn', 'is-default': True},
+                'en': {'name': 'fileEn'},
         })
 
     def test_copy(self):
         node = {
             'files': {
-                'de': ['fileDe', 'foo'],
-                'en': ['fileEn', 'bar'],
+                'de': {'name': 'fileDe'},
+                'en': {'name': 'fileEn'},
                 },
             'subnodes': [],
             }
 
         self.decorate(node)
 
-        node['files']['en'].append('baz')
+        node['files']['en']['foo'] = 'baz'
 
         self.assertEqual(node['files'], {
-                'de': ['fileDe', 'foo'],
-                'default': ['fileEn', 'bar'],
-                'en': ['fileEn', 'bar', 'baz'],
+                'de': {'name': 'fileDe'},
+                'default': {'name': 'fileEn', 'is-default': True},
+                'en': {'name': 'fileEn', 'foo': 'baz'},
         })

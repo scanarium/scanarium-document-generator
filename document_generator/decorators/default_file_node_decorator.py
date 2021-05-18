@@ -13,3 +13,4 @@ class DefaultFileNodeDecorator(NodeDecorator):
             # Since we want to avoid interference of default language and the
             # 'default' file, we cannot simply assign, but have to deepcopy.
             files['default'] = copy.deepcopy(files[self.default_l10n])
+            files['default']['is-default'] = True
