@@ -4,6 +4,7 @@ from importlib.machinery import SourceFileLoader
 from inspect import getmembers, isfunction
 
 from .file_decorator import FileDecorator
+from .id_title_collector_file_decorator import IdTitleCollectorFileDecorator
 
 
 class ValueInjectorFileDecorator(FileDecorator):
@@ -22,8 +23,13 @@ class ValueInjectorFileDecorator(FileDecorator):
                 imported_name, import_spec)
 
     def init_state(self, root):
+        id_title_collector = IdTitleCollectorFileDecorator()
+        id_title_colletor_state = id_title_collector.init_state(root)
+        id_title_collector.run(root, id_title_colletor_state)
+
         state = super().init_state(root)
-        state['id-title-map'] = {}
+        state['id-title-map'] = id_title_colletor_state['id-title-map']
+
         return state
 
     def loadExternalFunction(self, imported_name, import_spec):
@@ -61,7 +67,13 @@ class ValueInjectorFileDecorator(FileDecorator):
 
     def funcNodeTitle(self, file, state, args):
         id = args[0]
-        return id
+        lang = args[1]
+
+        title_map = state['id-title-map'][id]
+        if lang not in title_map:
+            lang = 'default'
+
+        return title_map[lang]
 
     def decorate_file(self, file, state):
         def replacement(match):
@@ -82,7 +94,7 @@ class ValueInjectorFileDecorator(FileDecorator):
         while current not in old_values:
             old_values.append(current)
             current = re.sub(
-                r'{\s*=\s*([a-z]+)\s*\(([^){]*)\)\s*}',
+                r'{\s*=\s*([a-zA-Z]+)\s*\(([^){]*)\)\s*}',
                 replacement,
                 current)
         file['markdown'] = current

@@ -9,15 +9,21 @@ FIXTURE_DIR = os.path.join('tests', 'fixtures',
 
 class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
     def assertInjectedMarkdown(self, markdown, expected, properties={},
-                               macros={}, external_functions={}):
+                               macros={}, external_functions={}, node=None):
         file = {
             'markdown': markdown,
             'properties': properties,
             }
 
+        if node is None:
+            node = {
+                "files": {},
+                "subnodes": [],
+            }
+
         decorator = ValueInjectorFileDecorator(
             macros=macros, external_functions=external_functions)
-        state = decorator.init_state({})
+        state = decorator.init_state(node)
         decorator.decorate_file(file, state)
 
         self.assertEqual(file['markdown'], expected)
@@ -230,3 +236,33 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
         self.assertInjectedMarkdown(
             '{=substring(FooBarBazQuux, , )}',
             'FooBarBazQuux')
+
+    def test_nodeTitle_plain(self):
+        node = {
+            'files': {
+                'de': {'id': 'foo', 'key': 'de', 'markdown': 'DeTitle\nbar'},
+                'default': {'id': 'foo', 'key': 'en', 'is-default': True,
+                            'markdown': 'EnTitle\nbar'},
+                },
+            'subnodes': [],
+            }
+
+        self.assertInjectedMarkdown(
+            'foo-{=nodeTitle(foo,de)}-bar',
+            'foo-DeTitle-bar',
+            node=node)
+
+    def test_nodeTitle_default_title(self):
+        node = {
+            'files': {
+                'de': {'id': 'foo', 'key': 'de', 'markdown': 'DeTitle\nbar'},
+                'default': {'id': 'foo', 'key': 'en', 'is-default': True,
+                            'markdown': 'EnTitle\nbar'},
+                },
+            'subnodes': [],
+            }
+
+        self.assertInjectedMarkdown(
+            'foo-{=nodeTitle(foo,fr)}-bar',
+            'foo-EnTitle-bar',
+            node=node)
