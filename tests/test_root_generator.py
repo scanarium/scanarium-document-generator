@@ -55,3 +55,19 @@ class DocumentGeneratorTest(DocumentPageTestCase):
             self.assertIn('error', stderr)
             self.assertIn('missing', stderr)
             self.assertEqual(1, exception.returncode)
+
+    def test_duplicate_id(self):
+        with self.tempDir() as dir:
+            command = [
+                os.path.join('.', 'generator.py'),
+                '--source', os.path.join(FIXTURE_DIR, 'duplicate-id'),
+                '--target', dir,
+            ]
+            with self.assertRaises(subprocess.CalledProcessError) as cm:
+                self.utils.run_command(command)
+
+            exception = cm.exception
+            stderr = exception.stderr
+            self.assertIn('error', stderr)
+            self.assertIn('this-id-is-duplicated', stderr)
+            self.assertEqual(1, exception.returncode)

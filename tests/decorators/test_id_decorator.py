@@ -20,6 +20,7 @@ class IdDecoratorTest(DocumentPageTestCase):
 
     def test_plain(self):
         node = {
+            'name': 'bar',
             'files': {
                 'default': {'properties': {'id': 'id-foo'}},
                 'en': {'properties': {}},
@@ -64,4 +65,39 @@ class IdDecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertIn('missing', messages[0]['text'])
         self.assertEqual(messages[0]['kind'], 'error')
+        self.assertEqual(len(messages), 1)
+
+    def test_duplicate_ids(self):
+        node11 = {
+            'name': 'node11',
+            'files': {
+                'default': {'properties': {'id': 'id-foo'}},
+            },
+            'subnodes': [],
+        }
+        node12 = {
+            'name': 'node12',
+            'files': {
+                'default': {'properties': {'id': 'id-foo'}},
+            },
+            'subnodes': [],
+        }
+        node1 = {
+            'name': 'node1',
+            'files': {
+                'default': {'properties': {'id': 'id-node1'}},
+                'en': {'properties': {}},
+            },
+            'subnodes': [node11, node12],
+        }
+
+        decorator = IdDecorator()
+        state = decorator.init_state()
+        decorator.run(node1, state)
+
+        messages = decorator.get_messages(state)
+        self.assertEqual(messages[0]['kind'], 'error')
+        self.assertIn('node11', messages[0]['text'])
+        self.assertIn('node12', messages[0]['text'])
+        self.assertIn('id-foo', messages[0]['text'])
         self.assertEqual(len(messages), 1)
