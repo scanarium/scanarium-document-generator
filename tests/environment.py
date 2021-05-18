@@ -23,3 +23,12 @@ class DocumentPageTestCase(unittest.TestCase):
     def assertEndsWith(self, haystack, needle):
         if not haystack.endswith(needle):
             self.fail(f'"{haystack}" does not end with "{needle}"')
+
+    def assertEmpty(self, lst):
+        if len(lst):
+            self.fail(f'List should be empty, but is "{lst}"')
+
+    def assertLenIs(self, lst, n):
+        if len(lst) != n:
+            self.fail(f'Length {n} expected, but length is {len(lst)} for '
+                      f'"{lst}"')

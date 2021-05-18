@@ -12,7 +12,7 @@ class ResourceExporterTest(DocumentPageTestCase):
             exporter = ResourceExporter([], dir)
             exporter.export()
 
-            self.assertEqual(len(os.listdir(dir)), 0)
+            self.assertEmpty(os.listdir(dir))
 
     def test_single_string(self):
         with self.tempDir() as dir:
@@ -22,4 +22,4 @@ class ResourceExporterTest(DocumentPageTestCase):
             exporter.export()
 
             self.assertFileExists(dir, '20-second chapter', 'en.md')
-            self.assertEqual(len(os.listdir(dir)), 1)
+            self.assertLenIs(os.listdir(dir), 1)

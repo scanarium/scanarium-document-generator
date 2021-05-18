@@ -111,7 +111,7 @@ class DecoratorTest(DocumentPageTestCase):
                 ])
 
         messages = decorator.get_messages(state)
-        self.assertEqual(len(messages), 0)
+        self.assertEmpty(messages)
 
     def test_warning_enter(self):
         node1 = {
@@ -128,7 +128,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertEqual(messages[0]['text'], 'node-enter node1')
         self.assertEqual(messages[0]['kind'], 'warning')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_warning_exit(self):
         node1 = {
@@ -145,7 +145,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertEqual(messages[0]['text'], 'node-exit node1')
         self.assertEqual(messages[0]['kind'], 'warning')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_warning_file(self):
         node1 = {
@@ -165,7 +165,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertEqual(messages[0]['text'], 'file en')
         self.assertEqual(messages[0]['kind'], 'warning')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_error_enter(self):
         node1 = {
@@ -182,7 +182,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertEqual(messages[0]['text'], 'node-enter node1')
         self.assertEqual(messages[0]['kind'], 'error')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_error_exit(self):
         node1 = {
@@ -199,7 +199,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertEqual(messages[0]['text'], 'node-exit node1')
         self.assertEqual(messages[0]['kind'], 'error')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_error_file(self):
         node1 = {
@@ -219,7 +219,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertEqual(messages[0]['text'], 'file en')
         self.assertEqual(messages[0]['kind'], 'error')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_warning_error_mix(self):
         node11 = {
@@ -254,7 +254,7 @@ class DecoratorTest(DocumentPageTestCase):
         self.assertEqual(messages[1]['kind'], 'warning')
         self.assertEqual(messages[2]['text'], 'node-exit node1')
         self.assertEqual(messages[2]['kind'], 'warning')
-        self.assertEqual(len(messages), 3)
+        self.assertLenIs(messages, 3)
 
     def test_raise_enter(self):
         node1 = {
@@ -271,7 +271,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertIn('node-enter node1', messages[0]['text'])
         self.assertEqual(messages[0]['kind'], 'error')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_raise_exit(self):
         node1 = {
@@ -288,7 +288,7 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertIn('node-exit node1', messages[0]['text'])
         self.assertEqual(messages[0]['kind'], 'error')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)
 
     def test_raise_file(self):
         node1 = {
@@ -308,4 +308,4 @@ class DecoratorTest(DocumentPageTestCase):
         messages = decorator.get_messages(state)
         self.assertIn('file en', messages[0]['text'])
         self.assertEqual(messages[0]['kind'], 'error')
-        self.assertEqual(len(messages), 1)
+        self.assertLenIs(messages, 1)

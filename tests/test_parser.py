@@ -19,15 +19,15 @@ class ParserTest(DocumentPageTestCase):
 
         files = actual['files']
         self.assertEqual(files['en']['key'], 'en')
-        self.assertEqual(len(files), 1)
+        self.assertLenIs(files, 1)
 
         subnodes = actual['subnodes']
-        self.assertEqual(len(subnodes[0]['files']), 0)
+        self.assertEmpty(subnodes[0]['files'])
         self.assertEqual(
             subnodes[0]['subnodes'][0]['files']['de']['key'], 'de')
         self.assertEqual(
             subnodes[0]['subnodes'][0]['files']['en']['key'], 'en')
-        self.assertEqual(len(subnodes[0]['subnodes'][0]['files']), 2)
+        self.assertLenIs(subnodes[0]['subnodes'][0]['files'], 2)
         self.assertEqual(
             subnodes[0]['subnodes'][0]['subnodes'][0]['files']['de']['key'],
             'de')
@@ -38,14 +38,14 @@ class ParserTest(DocumentPageTestCase):
             len(subnodes[0]['subnodes'][0]['subnodes'][0]['files']), 2)
         self.assertEqual(
             len(subnodes[0]['subnodes'][0]['subnodes'][0]['subnodes']), 0)
-        self.assertEqual(len(subnodes[0]['subnodes'][0]['subnodes']), 1)
+        self.assertLenIs(subnodes[0]['subnodes'][0]['subnodes'], 1)
         self.assertEqual(
             subnodes[0]['subnodes'][1]['files']['de']['key'], 'de')
         self.assertEqual(
             subnodes[0]['subnodes'][1]['files']['en']['key'], 'en')
-        self.assertEqual(len(subnodes[0]['subnodes'][1]['files']), 2)
-        self.assertEqual(len(subnodes[0]['subnodes'][1]['subnodes']), 0)
-        self.assertEqual(len(subnodes[0]['subnodes']), 2)
+        self.assertLenIs(subnodes[0]['subnodes'][1]['files'], 2)
+        self.assertEmpty(subnodes[0]['subnodes'][1]['subnodes'])
+        self.assertLenIs(subnodes[0]['subnodes'], 2)
         self.assertEqual(subnodes[1]['files']['en']['key'], 'en')
-        self.assertEqual(len(subnodes[1]['files']), 1)
-        self.assertEqual(len(subnodes[1]['subnodes']), 0)
+        self.assertLenIs(subnodes[1]['files'], 1)
+        self.assertEmpty(subnodes[1]['subnodes'])
