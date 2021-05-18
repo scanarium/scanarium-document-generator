@@ -19,6 +19,8 @@ class DocumentGenerator(object):
         print('', file=target)
         print(message['kind'], file=target)
         print('  node:' + message['node']['name'], file=target)
+        print('  decorator:' + message['decorator'].__class__.__name__,
+              file=target)
         if 'file' in message:
             print('  file:' + message['file']['key'], file=target)
         print('  ' + message['text'], file=target)
