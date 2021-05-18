@@ -13,13 +13,13 @@ class DocumentPageTestCase(unittest.TestCase):
 
     def assertFileExists(self, *args):
         path = os.path.join(*args)
-        self.assertTrue(os.path.isfile(path),
-                        f'File "{path}" does not exist')
+        if not os.path.isfile(path):
+            self.fail(f'File "{path}" does not exist')
 
     def assertStartsWith(self, haystack, needle):
-        self.assertTrue(haystack.startswith(needle),
-                        f'"{haystack}" does not start with "{needle}"')
+        if not haystack.startswith(needle):
+            self.fail(f'"{haystack}" does not start with "{needle}"')
 
     def assertEndsWith(self, haystack, needle):
-        self.assertTrue(haystack.endswith(needle),
-                        f'"{haystack}" does not end with "{needle}"')
+        if not haystack.endswith(needle):
+            self.fail(f'"{haystack}" does not end with "{needle}"')
