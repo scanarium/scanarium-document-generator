@@ -18,11 +18,11 @@ class DocumentGenerator(object):
     def print_message(self, message, target=sys.stderr):
         print('', file=target)
         print(message['kind'], file=target)
-        print('  node:' + message['node']['name'], file=target)
-        print('  decorator:' + message['decorator'].__class__.__name__,
+        print('  node: ' + message['node']['name'], file=target)
+        print('  decorator: ' + message['decorator'].__class__.__name__,
               file=target)
         if 'file' in message:
-            print('  file:' + message['file']['key'], file=target)
+            print('  file: ' + message['file']['key'], file=target)
         print('  ' + message['text'], file=target)
 
     def run(self, conf, stderr=sys.stderr):
