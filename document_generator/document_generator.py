@@ -47,7 +47,7 @@ class DocumentGenerator(object):
                 ),
             HeaderFileDecorator(),
         ]:
-            state = decorator.init_state()
+            state = decorator.init_state(root_node)
             decorator.run(root_node, state)
             for message in decorator.get_messages(state):
                 self.print_message(message, target=stderr)

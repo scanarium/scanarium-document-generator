@@ -2,8 +2,8 @@ from .decorator import Decorator
 
 
 class IdDecorator(Decorator):
-    def init_state(self):
-        state = super().init_state()
+    def init_state(self, node):
+        state = super().init_state(node)
         state['seen-ids'] = {}
         return state
 

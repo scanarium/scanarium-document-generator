@@ -3,15 +3,19 @@ from document_generator.decorators import IdDecorator
 
 
 class IdDecoratorTest(DocumentPageTestCase):
+    def decorate(self, node):
+        decorator = IdDecorator()
+        state = decorator.init_state(node)
+        decorator.run(node, state)
+        return (state, decorator)
+
     def test_no_files(self):
         node = {
             'files': {},
             'subnodes': [],
             }
 
-        decorator = IdDecorator()
-        state = decorator.init_state()
-        decorator.run(node, state)
+        state, decorator = self.decorate(node)
 
         self.assertEqual(node['files'], {})
 
@@ -28,9 +32,7 @@ class IdDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
         }
 
-        decorator = IdDecorator()
-        state = decorator.init_state()
-        decorator.run(node, state)
+        state, decorator = self.decorate(node)
 
         self.assertEqual(node['files'], {
                 'default': {
@@ -53,9 +55,7 @@ class IdDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
         }
 
-        decorator = IdDecorator()
-        state = decorator.init_state()
-        decorator.run(node, state)
+        state, decorator = self.decorate(node)
 
         self.assertEqual(node['files'], {
                 'default': {'id': 'anonymous', 'properties': {'foo': 'bar'}},
@@ -91,9 +91,7 @@ class IdDecoratorTest(DocumentPageTestCase):
             'subnodes': [node11, node12],
         }
 
-        decorator = IdDecorator()
-        state = decorator.init_state()
-        decorator.run(node1, state)
+        state, decorator = self.decorate(node1)
 
         messages = decorator.get_messages(state)
         self.assertEqual(messages[0]['kind'], 'error')

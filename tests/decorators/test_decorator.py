@@ -16,8 +16,8 @@ class StubDecorator(Decorator):
         self.raise_on_file = 0
         self.raise_on_exit = 0
 
-    def init_state(self):
-        state = super().init_state()
+    def init_state(self, root):
+        state = super().init_state(root)
         state['number'] = 42
         return state
 
@@ -92,7 +92,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
 
         decorator = StubDecorator()
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         self.assertEqual(decorator.visited, [
@@ -122,7 +122,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.warn_on_enter = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -139,7 +139,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.warn_on_exit = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -159,7 +159,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.warn_on_file = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -176,7 +176,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.error_on_enter = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -193,7 +193,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.error_on_exit = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -213,7 +213,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.error_on_file = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -244,7 +244,7 @@ class DecoratorTest(DocumentPageTestCase):
         decorator.warn_on_enter = 44
         decorator.error_on_file = 43
         decorator.warn_on_exit = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -265,7 +265,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.raise_on_enter = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -282,7 +282,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.raise_on_exit = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)
@@ -302,7 +302,7 @@ class DecoratorTest(DocumentPageTestCase):
         }
         decorator = StubDecorator()
         decorator.raise_on_file = 43
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         messages = decorator.get_messages(state)

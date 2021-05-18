@@ -7,8 +7,8 @@ class StubDecorator(NodeDecorator):
         super().__init__()
         self.visited = []
 
-    def init_state(self):
-        state = super().init_state()
+    def init_state(self, root):
+        state = super().init_state(root)
         state['number'] = 42
         return state
 
@@ -58,7 +58,7 @@ class NodeDecoratorTest(DocumentPageTestCase):
         }
 
         decorator = StubDecorator()
-        state = decorator.init_state()
+        state = decorator.init_state(node1)
         decorator.run(node1, state)
 
         self.assertEqual(decorator.visited, [

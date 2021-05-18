@@ -10,7 +10,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\nbar\n')
         self.assertEqual(file['content-properties'], {})
@@ -21,7 +21,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\nbar\n')
         self.assertEqual(file['content-properties'], {
@@ -34,7 +34,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\nbar\n')
         self.assertEqual(file['content-properties'], {
@@ -47,7 +47,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\nbar\n')
         self.assertEqual(file['content-properties'], {
@@ -60,7 +60,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\nbar\n')
         self.assertEqual(file['content-properties'], {
@@ -73,7 +73,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\nbar\n')
         self.assertEqual(file['content-properties'], {
@@ -86,7 +86,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\nFoo:bar\n')
         self.assertEqual(file['content-properties'], {
@@ -100,7 +100,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\n')
         self.assertEqual(file['content-properties'], {
@@ -114,7 +114,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\n')
         self.assertEqual(file['content-properties'], {
@@ -128,7 +128,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], 'foo\n')
         self.assertEqual(file['content-properties'], {
@@ -142,7 +142,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], '')
         self.assertEqual(file['content-properties'], {'foo': 'bar'})
@@ -153,7 +153,7 @@ class MarkdownPropertyExtractorFileDecoratorTest(DocumentPageTestCase):
             }
         decorator = MarkdownPropertyExtractorFileDecorator()
 
-        decorator.decorate_file(file, decorator.init_state())
+        decorator.decorate_file(file, decorator.init_state({}))
 
         self.assertEqual(file['markdown'], '')
         self.assertEqual(file['content-properties'], {'foo': 'bar'})

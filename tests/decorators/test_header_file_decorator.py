@@ -3,6 +3,10 @@ from document_generator.decorators import HeaderFileDecorator
 
 
 class HeaderFileDecoratorTest(DocumentPageTestCase):
+    def decorate(self, file):
+        decorator = HeaderFileDecorator()
+        decorator.decorate_file(file, decorator.init_state({}))
+
     def test_empty(self):
         file = {
             'markdown': '',
@@ -10,8 +14,7 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
             'id': 'foo',
             }
 
-        decorator = HeaderFileDecorator()
-        decorator.decorate_file(file, decorator.init_state())
+        self.decorate(file)
 
         self.assertEqual(file['markdown'],
                          '# foo {: #foo class=document-generator-node}')
@@ -23,8 +26,7 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
             'level': 3,
             }
 
-        decorator = HeaderFileDecorator()
-        decorator.decorate_file(file, decorator.init_state())
+        self.decorate(file)
 
         self.assertEqual(file['markdown'],
                          '### Title foo {: #idFoo '
@@ -37,8 +39,7 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
             'level': 1,
             }
 
-        decorator = HeaderFileDecorator()
-        decorator.decorate_file(file, decorator.init_state())
+        self.decorate(file)
 
         self.assertEqual(file['markdown'],
                          '# Title foo {: #idFoo class=document-generator-node '
@@ -51,8 +52,7 @@ class HeaderFileDecoratorTest(DocumentPageTestCase):
             'level': 1,
             }
 
-        decorator = HeaderFileDecorator()
-        decorator.decorate_file(file, decorator.init_state())
+        self.decorate(file)
 
         self.assertEqual(file['markdown'],
                          '# Title foo {: #idFoo class=document-generator-node '

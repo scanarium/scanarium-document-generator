@@ -1,5 +1,5 @@
 class Decorator(object):
-    def init_state(self):
+    def init_state(self, node):
         return {
             '__decorator': {
                 'messages': [],

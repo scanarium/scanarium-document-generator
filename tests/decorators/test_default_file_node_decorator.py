@@ -3,14 +3,17 @@ from document_generator.decorators import DefaultFileNodeDecorator
 
 
 class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
+    def decorate(self, node):
+        decorator = DefaultFileNodeDecorator('en')
+        decorator.decorate_node(node, decorator.init_state(node))
+
     def test_no_files(self):
         node = {
             'files': {},
             'subnodes': [],
             }
 
-        decorator = DefaultFileNodeDecorator('en')
-        decorator.decorate_node(node, decorator.init_state())
+        self.decorate(node)
 
         self.assertEqual(node['files'], {})
 
@@ -22,8 +25,7 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
             }
 
-        decorator = DefaultFileNodeDecorator('en')
-        decorator.decorate_node(node, decorator.init_state())
+        self.decorate(node)
 
         self.assertEqual(node['files'], {
                 'default': 'fileEn',
@@ -39,8 +41,7 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
             }
 
-        decorator = DefaultFileNodeDecorator('en')
-        decorator.decorate_node(node, decorator.init_state())
+        self.decorate(node)
 
         self.assertEqual(node['files'], {
                 'de': 'fileDe',
@@ -57,8 +58,7 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
             }
 
-        decorator = DefaultFileNodeDecorator('en')
-        decorator.decorate_node(node, decorator.init_state())
+        self.decorate(node)
 
         node['files']['en'].append('baz')
 

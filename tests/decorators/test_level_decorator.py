@@ -3,14 +3,17 @@ from document_generator.decorators import LevelDecorator
 
 
 class LevelDecoratorTest(DocumentPageTestCase):
+    def decorate(self, node):
+        decorator = LevelDecorator()
+        decorator.run(node, decorator.init_state(node))
+
     def test_no_files(self):
         node = {
             'files': {},
             'subnodes': [],
             }
 
-        decorator = LevelDecorator()
-        decorator.run(node, decorator.init_state())
+        self.decorate(node)
 
         self.assertEqual(node['files'], {})
 
@@ -21,7 +24,7 @@ class LevelDecoratorTest(DocumentPageTestCase):
             }
 
         decorator = LevelDecorator()
-        decorator.run(node, decorator.init_state())
+        decorator.run(node, decorator.init_state(node))
 
         self.assertEqual(node['files'], {'en': {'level': 1}})
 
@@ -31,8 +34,7 @@ class LevelDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
             }
 
-        decorator = LevelDecorator()
-        decorator.run(node, decorator.init_state())
+        self.decorate(node)
 
         self.assertEqual(node['files'], {
                 'en': {'level': 1},
@@ -50,8 +52,7 @@ class LevelDecoratorTest(DocumentPageTestCase):
                 ]
             }
 
-        decorator = LevelDecorator()
-        decorator.run(node, decorator.init_state())
+        self.decorate(node)
 
         self.assertEqual(node['files'], {
                 'en': {'level': 1},

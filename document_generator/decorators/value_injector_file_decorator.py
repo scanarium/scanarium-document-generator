@@ -14,11 +14,17 @@ class ValueInjectorFileDecorator(FileDecorator):
             "property": self.funcProperty,
             "macro": self.funcMacro,
             "substring": self.funcSubstring,
+            "nodeTitle": self.funcNodeTitle,
             }
 
         for imported_name, import_spec in external_functions.items():
             self.funcs[imported_name] = self.loadExternalFunction(
                 imported_name, import_spec)
+
+    def init_state(self, root):
+        state = super().init_state(root)
+        state['id-title-map'] = {}
+        return state
 
     def loadExternalFunction(self, imported_name, import_spec):
         ret = None
@@ -52,6 +58,10 @@ class ValueInjectorFileDecorator(FileDecorator):
         end = int(args[-1]) if args[-1] else None
         start = int(args[-2]) if args[-2] else None
         return ', '.join(args[0:-2])[start:end]
+
+    def funcNodeTitle(self, file, state, args):
+        id = args[0]
+        return id
 
     def decorate_file(self, file, state):
         def replacement(match):

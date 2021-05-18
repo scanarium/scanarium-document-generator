@@ -10,7 +10,7 @@ class PropertyDecoratorTest(DocumentPageTestCase):
             }
 
         decorator = PropertyDecorator()
-        decorator.run(node, decorator.init_state())
+        decorator.run(node, decorator.init_state(node))
 
         self.assertEqual(node['files'], {})
 
@@ -34,7 +34,7 @@ class PropertyDecoratorTest(DocumentPageTestCase):
         }
 
         decorator = PropertyDecorator()
-        decorator.run(node, decorator.init_state())
+        decorator.run(node, decorator.init_state(node))
 
         self.assertEqual(node['files']['default']['properties'], {
                 'language': 'fr',
@@ -81,7 +81,7 @@ class PropertyDecoratorTest(DocumentPageTestCase):
         }
 
         decorator = PropertyDecorator()
-        decorator.run(node, decorator.init_state())
+        decorator.run(node, decorator.init_state(node))
 
         self.assertEqual(node['files']['default']['properties'], {
                         'language': 'default',
@@ -168,7 +168,7 @@ class PropertyDecoratorTest(DocumentPageTestCase):
         }
 
         decorator = PropertyDecorator()
-        decorator.run(node1, decorator.init_state())
+        decorator.run(node1, decorator.init_state(node1))
 
         self.assertEqual(node1['files']['en']['properties'], {
                 'language': 'en',

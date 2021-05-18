@@ -7,8 +7,8 @@ class StubDecorator(FileDecorator):
         super().__init__()
         self.visited = []
 
-    def init_state(self):
-        state = super().init_state()
+    def init_state(self, root):
+        state = super().init_state(root)
         state['number'] = 42
         return state
 
@@ -21,6 +21,12 @@ class StubDecorator(FileDecorator):
 
 
 class FileDecoratorTest(DocumentPageTestCase):
+    def decorate(self, node):
+        decorator = StubDecorator()
+        state = decorator.init_state(node)
+        decorator.run(node, state)
+        return decorator
+
     def test_simple(self):
         node111 = {
             'name': 'node111',
@@ -57,9 +63,7 @@ class FileDecoratorTest(DocumentPageTestCase):
             'subnodes': [node11, node12],
         }
 
-        decorator = StubDecorator()
-        state = decorator.init_state()
-        decorator.run(node1, state)
+        decorator = self.decorate(node1)
 
         self.assertEqual(decorator.visited, [
                 "file-1-barEn (state: 42)",

@@ -17,7 +17,7 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
 
         decorator = ValueInjectorFileDecorator(
             macros=macros, external_functions=external_functions)
-        state = decorator.init_state()
+        state = decorator.init_state({})
         decorator.decorate_file(file, state)
 
         self.assertEqual(file['markdown'], expected)

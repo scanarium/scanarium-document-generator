@@ -9,8 +9,8 @@ class PropertyDecorator(Decorator):
         self.utils = Utils()
         self.initial_state = initial_state
 
-    def init_state(self):
-        state = super().init_state()
+    def init_state(self, node):
+        state = super().init_state(node)
 
         # The `properties-list` list acts as storage for states as we traverse
         # the hierarchy. The current node's properties are at the end of the
