@@ -9,10 +9,12 @@ FIXTURE_DIR = os.path.join('tests', 'fixtures',
 
 class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
     def assertInjectedMarkdown(self, markdown, expected, properties={},
-                               macros={}, external_functions={}, node=None):
+                               macros={}, external_functions={}, node=None,
+                               file_key='en'):
         file = {
             'markdown': markdown,
             'properties': properties,
+            'key': file_key,
             }
 
         if node is None:
@@ -266,3 +268,18 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             'foo-{=nodeTitle(foo,fr)}-bar',
             'foo-EnTitle-bar',
             node=node)
+
+    def test_nodeTitle_infered_language(self):
+        node = {
+            'files': {
+                'de': {'id': 'foo', 'key': 'de', 'markdown': 'DeTitle\nbar'},
+                'default': {'id': 'foo', 'key': 'en', 'is-default': True,
+                            'markdown': 'EnTitle\nbar'},
+                },
+            'subnodes': [],
+            }
+
+        self.assertInjectedMarkdown(
+            'foo-{=nodeTitle(foo)}-bar',
+            'foo-DeTitle-bar',
+            node=node, file_key='de')

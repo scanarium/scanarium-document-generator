@@ -67,7 +67,10 @@ class ValueInjectorFileDecorator(FileDecorator):
 
     def funcNodeTitle(self, file, state, args):
         id = args[0]
-        lang = args[1]
+        if len(args) > 1:
+            lang = args[1]
+        else:
+            lang = file['key']
 
         title_map = state['id-title-map'][id]
         if lang not in title_map:
