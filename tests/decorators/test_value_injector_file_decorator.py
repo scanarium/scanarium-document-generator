@@ -283,3 +283,77 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             'foo-{=nodeTitle(foo)}-bar',
             'foo-DeTitle-bar',
             node=node, file_key='de')
+
+    def test_decorate_text_plain(self):
+        node = {
+            'files': {},
+            'subnodes': [],
+            }
+
+        decorator = ValueInjectorFileDecorator()
+        state = decorator.init_state(node)
+        actual = decorator.decorate_text('foo', state)
+        self.assertEqual(actual, 'foo')
+        self.assertEmpty(decorator.get_messages(state))
+
+    def test_decorate_text_properties(self):
+        node = {
+            'files': {},
+            'subnodes': [],
+            }
+
+        decorator = ValueInjectorFileDecorator()
+        state = decorator.init_state(node)
+        actual = decorator.decorate_text('{=property(foo)}', state)
+        # Property does not exist, hence it does not get replaced. But itshould
+        # not throw errors
+        self.assertEqual(actual, '{=property(foo)}')
+        self.assertEmpty(decorator.get_messages(state))
+
+    def test_decorate_text_substring(self):
+        node = {
+            'files': {},
+            'subnodes': [],
+            }
+
+        decorator = ValueInjectorFileDecorator()
+        state = decorator.init_state(node)
+        actual = decorator.decorate_text(
+            '{=substring(foo-bar-bak, 4, 7)}', state)
+        # Property does not exist, hence it does not get replaced. But itshould
+        # not throw errors
+        self.assertEqual(actual, 'bar')
+        self.assertEmpty(decorator.get_messages(state))
+
+    def test_decorate_text_nodeTitle_default_key(self):
+        node = {
+            'files': {'default': {
+                    'id': 'root',
+                    'key': 'default',
+                    'markdown': 'bar\nquux',
+                    }},
+            'subnodes': [],
+            }
+
+        decorator = ValueInjectorFileDecorator()
+        state = decorator.init_state(node)
+        actual = decorator.decorate_text('foo-{=nodeTitle(root)}-baz', state)
+        self.assertEqual(actual, 'foo-bar-baz')
+        self.assertEmpty(decorator.get_messages(state))
+
+    def test_decorate_text_nodeTitle_en_key(self):
+        node = {
+            'files': {'en': {
+                    'id': 'root',
+                    'key': 'en',
+                    'markdown': 'bar\nquux',
+                    }},
+            'subnodes': [],
+            }
+
+        decorator = ValueInjectorFileDecorator()
+        state = decorator.init_state(node)
+        actual = decorator.decorate_text(
+            'foo-{=nodeTitle(root)}-baz', state, key='en')
+        self.assertEqual(actual, 'foo-bar-baz')
+        self.assertEmpty(decorator.get_messages(state))
