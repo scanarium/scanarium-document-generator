@@ -35,6 +35,7 @@ class DocumentGenerator(object):
         root_node = parser.parse(markdown_dir)
 
         errors = 0
+        states = {}
         for decorator in [
             MarkdownPropertyExtractorFileDecorator(),
             LevelDecorator(),
@@ -53,12 +54,22 @@ class DocumentGenerator(object):
                 self.print_message(message, target=stderr)
                 if message['kind'] != 'warning':
                     errors += 1
+            states[decorator] = state
 
         os.makedirs(output_dir, exist_ok=True)
 
         ResourceExporter(conf.get('resources', []), output_dir).export()
 
-        AllInOneExporter(root_node, output_dir, default_l10n, other_l10ns,
-                         conf.get('exporter', [])).export()
+        value_injector = None
+        value_injector_state = None
+        for decorator, state in states.items():
+            if isinstance(decorator, ValueInjectorFileDecorator):
+                value_injector = decorator
+                value_injector_state = state
+
+        AllInOneExporter(
+            root_node, output_dir, default_l10n, other_l10ns,
+            conf.get('exporter', []), value_injector, value_injector_state
+            ).export()
 
         return errors

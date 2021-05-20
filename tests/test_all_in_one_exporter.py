@@ -2,6 +2,7 @@ import os
 
 from .environment import DocumentPageTestCase
 from document_generator import AllInOneExporter
+from document_generator.decorators import ValueInjectorFileDecorator
 
 FIXTURE_DIR = os.path.join('tests', 'fixtures', 'document-node-parser')
 
@@ -29,10 +30,16 @@ class AllInOneExporterTest(DocumentPageTestCase):
         node1 = {
             'files': {
                 'en': {
-                    'markdown': 'barEn'
+                    'markdown': 'barEn',
+                    'properties': {},
                     },
                 'eo': {
-                    'markdown': 'barEo'
+                    'markdown': 'barEo',
+                    'properties': {},
+                    },
+                'default': {
+                    'markdown': 'barDefault',
+                    'properties': {},
                     },
             },
             'subnodes': [node11],
@@ -59,7 +66,12 @@ class AllInOneExporterTest(DocumentPageTestCase):
         node1 = {
             'files': {
                 'en': {
-                    'markdown': 'fooEn'
+                    'markdown': 'fooEn',
+                    'properties': {},
+                    },
+                'default': {
+                    'markdown': '',
+                    'properties': {},
                     },
                 },
             'subnodes': [],
@@ -89,7 +101,12 @@ class AllInOneExporterTest(DocumentPageTestCase):
         node1 = {
             'files': {
                 'en': {
-                    'markdown': 'fooEn'
+                    'markdown': 'fooEn',
+                    'properties': {},
+                    },
+                'default': {
+                    'markdown': '',
+                    'properties': {},
                     },
                 },
             'subnodes': [],
@@ -119,7 +136,12 @@ class AllInOneExporterTest(DocumentPageTestCase):
         node1 = {
             'files': {
                 'en': {
-                    'markdown': 'fooEn'
+                    'markdown': 'fooEn',
+                    'properties': {},
+                    },
+                'default': {
+                    'markdown': 'fooEn',
+                    'properties': {},
                     },
                 },
             'subnodes': [],
@@ -154,6 +176,60 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertIn('HEADER2', contents)
             self.assertIn('fooEn', contents)
             self.assertIn('FOOTER1', contents)
+            self.assertEndsWith(contents, 'FOOTER2')
+
+            self.assertNotIn('OMITTED', contents)
+
+    def test_properties(self):
+        node1 = {
+            'files': {
+                'en': {
+                    'markdown': 'fooEn',
+                    'properties': {
+                        'foo': 'bar',
+                        },
+                    },
+                'default': {
+                    'markdown': '',
+                    'properties': {},
+                    },
+                },
+            'subnodes': [],
+            }
+
+        with self.tempDir() as dir:
+            template = '\n'.join([
+                    'HEADER1{=property(foo)}',
+                    'HEADER2',
+                    '<!-- HEADER-END -->',
+                    'OMITTED1',
+                    'OMITTED2',
+                    '<!-- FOOTER-START -->',
+                    'FOOTER1{=property(foo)}',
+                    'FOOTER2',
+                    ])
+            template_file = os.path.join(dir, 'template')
+            with open(template_file, 'w+') as f:
+                f.write(template)
+
+            conf = {
+                'html-template-file': template_file,
+                }
+
+            value_injector = ValueInjectorFileDecorator()
+            value_injector_state = value_injector.init_state(node1)
+            exporter = AllInOneExporter(
+                node1, dir, 'en', [], conf, value_injector=value_injector,
+                value_injector_state=value_injector_state)
+            exporter.export()
+
+            with open(os.path.join(dir, 'all.html.en')) as f:
+                contents = f.read()
+
+            self.assertStartsWith(contents, 'HEADER1bar')
+            self.assertIn('HEADER2', contents)
+            self.assertIn('fooEn', contents)
+            self.assertIn('FOOTER1bar', contents)
             self.assertEndsWith(contents, 'FOOTER2')
 
             self.assertNotIn('OMITTED', contents)

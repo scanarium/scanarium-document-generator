@@ -357,3 +357,24 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             'foo-{=nodeTitle(root)}-baz', state, key='en')
         self.assertEqual(actual, 'foo-bar-baz')
         self.assertEmpty(decorator.get_messages(state))
+
+    def test_decorate_text_property(self):
+        node = {
+            'files': {'en': {
+                    'id': 'root',
+                    'key': 'en',
+                    'markdown': 'bar\n{=property(foo)}',
+                    'properties': {
+                        'foo': 'quux',
+                        },
+                    }},
+            'subnodes': [],
+            }
+
+        decorator = ValueInjectorFileDecorator()
+        state = decorator.init_state(node)
+        actual = decorator.decorate_text(
+            'foo-{=property(foo)}-baz', state, key='en',
+            properties={'foo': 'bar'})
+        self.assertEqual(actual, 'foo-bar-baz')
+        self.assertEmpty(decorator.get_messages(state))

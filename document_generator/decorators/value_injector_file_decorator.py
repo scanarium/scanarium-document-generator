@@ -102,10 +102,10 @@ class ValueInjectorFileDecorator(FileDecorator):
                 current)
         file['markdown'] = current
 
-    def decorate_text(self, text, state, key='default'):
+    def decorate_text(self, text, state, key='default', properties={}):
         file = {
             'markdown': text,
-            'properties': {},
+            'properties': properties,
             'key': key,
             }
 

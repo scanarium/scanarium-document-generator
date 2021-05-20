@@ -11,13 +11,15 @@ FOOTER = '</body></html>'
 
 class AllInOneExporter(object):
     def __init__(self, root_node, output_dir, default_l10n, other_l10ns,
-                 conf={}):
+                 conf={}, value_injector=None, value_injector_state=None):
         self.root_node = root_node
         self.output_dir = output_dir
         self.default_l10n = default_l10n
         self.all_l10ns = [self.default_l10n] + other_l10ns
         self.header = HEADER
         self.footer = FOOTER
+        self.value_injector = value_injector
+        self.value_injector_state = value_injector_state
 
         if 'html-template-file' in conf:
             with open(conf['html-template-file'], 'rt') as f:
@@ -74,12 +76,25 @@ class AllInOneExporter(object):
 
         return ret
 
+    def inject_values(self, text, l10n, properties):
+        ret = text
+        if self.value_injector:
+            ret = self.value_injector.decorate_text(
+                ret, self.value_injector_state, key=l10n,
+                properties=properties)
+        return ret
+
     def export(self):
         renderer = MarkdownRenderer()
         for l10n in self.all_l10ns:
+            properties = self.root_node['files'].get(
+                l10n, self.root_node['files']['default'])['properties']
+            header = self.inject_values(self.header, l10n, properties)
+            footer = self.inject_values(self.footer, l10n, properties)
+
             markdown = self._get_full_markdown(self.root_node, l10n)
             file = os.path.join(self.output_dir, f'all.html.{l10n}')
             with open(file, 'w+') as f:
-                f.write(self.header)
+                f.write(header)
                 f.write(renderer.render(markdown))
-                f.write(self.footer)
+                f.write(footer)
