@@ -12,41 +12,50 @@ class PropertyDecorator(Decorator):
     def init_state(self, node):
         state = super().init_state(node)
 
-        # The `properties-list` list acts as storage for states as we traverse
-        # the hierarchy. The current node's properties are at the end of the
-        # list.
+        # The `ancestor-properties` list keeps track of the properties of each
+        # parent of the current node we traverse the hierarchy. The current
+        # node's properties are at the end of the list.
         #
-        # Preparing initial properties to act as parent properties
+        # Preparing initial properties to act as ancestor properties
         # for root node.
-        state['properties-list'] = [copy.deepcopy(self.initial_state)]
+        state['ancestor-properties'] = [
+            {'properties': copy.deepcopy(self.initial_state)}]
         return state
 
     def decorate_node_enter(self, node, state):
-        # Seeding from properties of parent node.
-        properties = copy.deepcopy(state['properties-list'][-1])
+        properties = {}
+        if 'properties' in node['files']:
+            properties = node['files']['properties']['content-properties']
 
-        if node['files']:
-            # Overriding with `default` file's properties
-            self.utils.update_dict(properties, copy.deepcopy(
-                    node['files']['default']['content-properties']))
-
-            # Overriding with `property` file's properties
-            if 'properties' in node['files']:
-                self.utils.update_dict(properties, copy.deepcopy(
-                        node['files']['properties']['content-properties']))
-
-        # Appending our own state, so file decorations can find the current
-        # state at the end of the list.
-        state['properties-list'].append(properties)
+        state['ancestor-properties'].append({'properties': properties})
 
     def decorate_file(self, file, state):
-        properties = copy.deepcopy(state['properties-list'][-1])
-        self.utils.update_dict(
-            properties, copy.deepcopy(file['content-properties']))
-        properties['language'] = file['key']
-        file['properties'] = properties
+        # The `properties` file got covered in `decorate_node_enter` already,
+        # so we skip over it.
+        if file['key'] != 'properties':
+            current_level = state['ancestor-properties'][-1]
+            key = file['key'] if 'is-default' not in file else 'default'
+            current_level[key] = file['content-properties']
+
+            properties = {}
+            for level_properties in state['ancestor-properties']:
+                if 'properties' in level_properties:
+                    self.utils.update_dict(
+                        properties,
+                        copy.deepcopy(level_properties['properties']))
+                if file['key'] in level_properties:
+                    self.utils.update_dict(
+                        properties,
+                        copy.deepcopy(level_properties[file['key']]))
+                elif 'default' in level_properties:
+                    self.utils.update_dict(
+                        properties, copy.deepcopy(level_properties['default']))
+
+            properties['language'] = file['key']
+
+            file['properties'] = properties
 
     def decorate_node_exit(self, node, state):
         # Removing our own state again. So the end of the list holds our
-        # parent's state again.
-        del state['properties-list'][-1]
+        # ancestors' state again.
+        del state['ancestor-properties'][-1]

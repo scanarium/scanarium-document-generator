@@ -148,7 +148,7 @@ Each file is represented by a dictionary with the following key/values.
 | `key` | DocumentFileParser | The name (i.e.: language) of the file without the trailing `.md` |
 | `level` | LevelDecorator | The depth in the node hierarchy of the node that this file belongs to. |
 | `markdown` | MarkdownPropertyExtractorFileDecorator | The markdown part of `raw-content` as string. The `HeaderFileDecorator` adjusts the format of the first line. |
-| `properties` | PropertyDecorator | Merged properties of the parent node, overruled by the `content-properties` of the `default`, overruled by those of `properties`, and finally overruled by those of the current file. `language` is set to the file's `key` |
+| `properties` | PropertyDecorator | A dictionary of properties for this file. This dictionary is seeded with the global properties (E.g.: `build_day_iso`). Then descending from the root node to the current node, each node updates (if necessary adds) properties. For each node, the following steps are taken. If the `properties.md` file exists for the node, its `content-properties` are added. Next, if the node has a file for the current language, its `content-properties` are added. If the node does not have a file for the current language, but has a file for the default language, the `content-properties` for the default language get added. Finally, `language` is set to the file's `key` |
 | `raw-content` | DocumentFileParser | The raw file contents as string |
 
 

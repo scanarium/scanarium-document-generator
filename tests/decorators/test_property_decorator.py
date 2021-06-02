@@ -3,215 +3,221 @@ from document_generator.decorators import PropertyDecorator
 
 
 class PropertyDecoratorTest(DocumentPageTestCase):
+    def run_decorator(self, node):
+        decorator = PropertyDecorator(initial_state={
+                'global': 'global',
+                'global-maybe-overridden': 'global',
+                })
+        decorator.run(node, decorator.init_state(node))
+
     def test_no_files(self):
         node = {
             'files': {},
             'subnodes': [],
             }
 
-        decorator = PropertyDecorator()
-        decorator.run(node, decorator.init_state(node))
+        self.run_decorator(node)
 
         self.assertEqual(node['files'], {})
 
-    def test_file_and_default(self):
+    def test_file(self):
         node = {
             'files': {
-                'default': {
-                    'key': 'fr',
-                    'content-properties': {
-                        'only-default': 'default',
-                        'default-and-en': 'default',
-                        }},
                 'en': {
                     'key': 'en',
                     'content-properties': {
+                        'global-maybe-overridden': 'en',
                         'only-en': 'en',
-                        'default-and-en': 'en',
                         }},
             },
             'subnodes': [],
         }
 
-        decorator = PropertyDecorator()
-        decorator.run(node, decorator.init_state(node))
-
-        self.assertEqual(node['files']['default']['properties'], {
-                'language': 'fr',
-                'only-default': 'default',
-                'default-and-en': 'default',
-                })
+        self.run_decorator(node)
 
         self.assertEqual(node['files']['en']['properties'], {
+                'global': 'global',
+                'global-maybe-overridden': 'en',
                 'language': 'en',
-                'only-default': 'default',
                 'only-en': 'en',
-                'default-and-en': 'en',
                 })
 
-    def test_file_default_and_properties(self):
+    def test_file_with_properties_file(self):
         node = {
             'files': {
-                'default': {
-                    'key': 'default',
-                    'content-properties': {
-                        'default-and-en': 'default',
-                        'default-and-properties': 'default',
-                        'default-and-properties-and-en': 'default',
-                        'only-default': 'default',
-                        }},
                 'en': {
                     'key': 'en',
                     'content-properties': {
-                        'default-and-en': 'en',
-                        'default-and-properties-and-en': 'en',
                         'en-and-properties': 'en',
                         'only-en': 'en',
                         }},
                 'properties': {
                     'key': 'properties',
                     'content-properties': {
-                        'default-and-properties': 'properties',
-                        'default-and-properties-and-en': 'properties',
                         'en-and-properties': 'properties',
+                        'global-maybe-overridden': 'properties',
                         'only-properties': 'properties',
                         }},
             },
             'subnodes': [],
         }
 
-        decorator = PropertyDecorator()
-        decorator.run(node, decorator.init_state(node))
-
-        self.assertEqual(node['files']['default']['properties'], {
-                        'language': 'default',
-                        'default-and-en': 'default',
-                        'default-and-properties': 'default',
-                        'default-and-properties-and-en': 'default',
-                        'en-and-properties': 'properties',
-                        'only-default': 'default',
-                        'only-properties': 'properties',
-                })
-
-        self.assertEqual(node['files']['properties']['properties'], {
-                        'language': 'properties',
-                        'default-and-en': 'default',
-                        'default-and-properties': 'properties',
-                        'default-and-properties-and-en': 'properties',
-                        'en-and-properties': 'properties',
-                        'only-default': 'default',
-                        'only-properties': 'properties',
-                })
+        self.run_decorator(node)
 
         self.assertEqual(node['files']['en']['properties'], {
-                        'language': 'en',
-                        'default-and-en': 'en',
-                        'default-and-properties': 'properties',
-                        'default-and-properties-and-en': 'en',
-                        'en-and-properties': 'en',
-                        'only-default': 'default',
-                        'only-en': 'en',
-                        'only-properties': 'properties',
+                'en-and-properties': 'en',
+                'global': 'global',
+                'global-maybe-overridden': 'properties',
+                'language': 'en',
+                'only-en': 'en',
+                'only-properties': 'properties',
                 })
 
-    def test_inheritance(self):
-        node11 = {
-            'files': {
-                'en': {
-                    'key': 'en',
-                    'content-properties': {
-                        'node11-en': 'node11-en',
-                        }},
-                'default': {
-                    'key': 'default',
-                    'content-properties': {
-                        'node11-default': 'node11-default',
-                        'node1-overriden-by-node11': 'node11-default',
-                        }},
-            },
-            'subnodes': [],
-        }
-
-        node12 = {
-            'files': {
-                'en': {
-                    'key': 'en',
-                    'content-properties': {
-                        'node12-en': 'node12-en',
-                        }},
-                'default': {
-                    'key': 'default',
-                    'content-properties': {
-                        'node12-default': 'node12-default',
-                        'node1-overriden-by-node12': 'node12-default',
-                        }},
-            },
-            'subnodes': [],
-        }
-
+    def test_tree_without_default_parent(self):
         node1 = {
             'files': {
                 'en': {
                     'key': 'en',
                     'content-properties': {
-                        'node1-en': 'node1-en',
+                        'en-and-properties': 'en',
+                        'only-en': 'en',
+                        'only-lang': 'en',
                         }},
-                'default': {
-                    'key': 'default',
+                'de': {
+                    'key': 'de',
                     'content-properties': {
-                        'node1-default': 'node1-default',
-                        'node1-overriden-by-node11': 'node1-default',
-                        'node1-overriden-by-node12': 'node1-default',
+                        'de-and-properties': 'de',
+                        'only-de': 'de',
+                        'only-lang': 'de',
+                        }},
+                'properties': {
+                    'key': 'properties',
+                    'content-properties': {
+                        'en-and-properties': 'properties',
+                        'only-properties': 'properties',
                         }},
             },
-            'subnodes': [node11, node12],
+            'subnodes': [],
         }
 
-        decorator = PropertyDecorator()
-        decorator.run(node1, decorator.init_state(node1))
+        node = {
+            'files': {
+                'en': {
+                    'key': 'en',
+                    'content-properties': {
+                        'global-maybe-overridden': 'en',
+                        }},
+                'properties': {
+                    'key': 'properties',
+                    'content-properties': {
+                        'global-maybe-overridden': 'properties',
+                        }},
+            },
+            'subnodes': [node1],
+        }
+
+        self.run_decorator(node)
+
+        self.assertEqual(node['files']['en']['properties'], {
+                'global': 'global',
+                'global-maybe-overridden': 'en',
+                'language': 'en',
+                })
 
         self.assertEqual(node1['files']['en']['properties'], {
+                'en-and-properties': 'en',
+                'global': 'global',
+                'global-maybe-overridden': 'en',
                 'language': 'en',
-                'node1-default': 'node1-default',
-                'node1-en': 'node1-en',
-                'node1-overriden-by-node11': 'node1-default',
-                'node1-overriden-by-node12': 'node1-default',
-                })
-        self.assertEqual(node1['files']['default']['properties'], {
-                'language': 'default',
-                'node1-default': 'node1-default',
-                'node1-overriden-by-node11': 'node1-default',
-                'node1-overriden-by-node12': 'node1-default',
+                'only-en': 'en',
+                'only-lang': 'en',
+                'only-properties': 'properties',
                 })
 
-        self.assertEqual(node11['files']['en']['properties'], {
-                'language': 'en',
-                'node1-default': 'node1-default',
-                'node11-default': 'node11-default',
-                'node11-en': 'node11-en',
-                'node1-overriden-by-node11': 'node11-default',
-                'node1-overriden-by-node12': 'node1-default',
-                })
-        self.assertEqual(node11['files']['default']['properties'], {
-                'language': 'default',
-                'node1-default': 'node1-default',
-                'node11-default': 'node11-default',
-                'node1-overriden-by-node11': 'node11-default',
-                'node1-overriden-by-node12': 'node1-default',
+        self.assertEqual(node1['files']['de']['properties'], {
+                'de-and-properties': 'de',
+                'en-and-properties': 'properties',
+                'global': 'global',
+                'global-maybe-overridden': 'properties',
+                'language': 'de',
+                'only-de': 'de',
+                'only-lang': 'de',
+                'only-properties': 'properties',
                 })
 
-        self.assertEqual(node12['files']['en']['properties'], {
+    def test_tree_with_default_parent(self):
+        node1 = {
+            'files': {
+                'en': {
+                    'key': 'en',
+                    'content-properties': {
+                        'en-and-properties': 'en',
+                        'only-en': 'en',
+                        'only-lang': 'en',
+                        }},
+                'de': {
+                    'key': 'de',
+                    'content-properties': {
+                        'de-and-properties': 'de',
+                        'only-de': 'de',
+                        'only-lang': 'de',
+                        }},
+                'properties': {
+                    'key': 'properties',
+                    'content-properties': {
+                        'en-and-properties': 'properties',
+                        'only-properties': 'properties',
+                        }},
+            },
+            'subnodes': [],
+        }
+
+        node = {
+            'files': {
+                'default': {
+                    'key': 'en',
+                    'is-default': True,
+                    'content-properties': {
+                        'global-maybe-overridden': 'en',
+                        'only-default': 'default',
+                        }},
+                'properties': {
+                    'key': 'properties',
+                    'content-properties': {
+                        'global-maybe-overridden': 'properties',
+                        }},
+            },
+            'subnodes': [node1],
+        }
+
+        self.run_decorator(node)
+
+        self.assertEqual(node['files']['default']['properties'], {
+                'global': 'global',
+                'global-maybe-overridden': 'en',
                 'language': 'en',
-                'node1-default': 'node1-default',
-                'node12-default': 'node12-default',
-                'node12-en': 'node12-en',
-                'node1-overriden-by-node11': 'node1-default',
-                'node1-overriden-by-node12': 'node12-default',
+                'only-default': 'default',
                 })
-        self.assertEqual(node12['files']['default']['properties'], {
-                'language': 'default',
-                'node1-default': 'node1-default',
-                'node12-default': 'node12-default',
-                'node1-overriden-by-node11': 'node1-default',
-                'node1-overriden-by-node12': 'node12-default',
+
+        self.assertEqual(node1['files']['en']['properties'], {
+                'en-and-properties': 'en',
+                'global': 'global',
+                'global-maybe-overridden': 'en',
+                'language': 'en',
+                'only-default': 'default',
+                'only-en': 'en',
+                'only-lang': 'en',
+                'only-properties': 'properties',
+                })
+
+        self.assertEqual(node1['files']['de']['properties'], {
+                'de-and-properties': 'de',
+                'en-and-properties': 'properties',
+                'global': 'global',
+                'global-maybe-overridden': 'en',
+                'language': 'de',
+                'only-de': 'de',
+                'only-default': 'default',
+                'only-lang': 'de',
+                'only-properties': 'properties',
                 })
