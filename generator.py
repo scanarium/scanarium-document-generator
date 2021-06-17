@@ -17,6 +17,11 @@ def parse_arguments(conf):
         help='The name of a json file to load the configuration from'
         ' (default: None)')
     parser.add_argument(
+        '--config-override',
+        help='Overrides configuration settings. Each `CONFIG_OVERRIDE` has to '
+        'be of the form `key.subkey.value...=subsubkey` (default: None)',
+        nargs='+', default=[])
+    parser.add_argument(
         '--source',
         help='The source directory for the help content'
         f' (default: {conf["source"]})')
@@ -77,6 +82,14 @@ if __name__ == "__main__":
     ]:
         if value is not None:
             conf[field] = value
+
+    for config_override in args.config_override:
+        d = conf
+        dot_parts = config_override.split('.')
+        for dot_part in dot_parts[:-1]:
+            d = conf[dot_part.strip()]
+        key, value = [x.strip() for x in dot_parts[-1].split('=', 1)]
+        d[key] = value
 
     if not isinstance(conf['additional_l10ns'], list):
         if conf['additional_l10ns'].strip():
