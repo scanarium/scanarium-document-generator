@@ -7,8 +7,9 @@ GIT = '/usr/bin/git'
 
 
 class BuildProperties(object):
-    def __init__(self, markdown_dir):
+    def __init__(self, markdown_dir, localizations):
         self.markdown_dir = markdown_dir
+        self.localizations = localizations
         self.utils = Utils()
 
     def addTimeFields(self, d):
@@ -40,10 +41,14 @@ class BuildProperties(object):
 
         d['build_git_description'] = description
 
+    def addLanguageFields(self, d):
+        d['build_localizations'] = ','.join(self.localizations)
+
     def getProperties(self):
         ret = {}
 
         self.addTimeFields(ret)
         self.addGitFields(ret)
+        self.addLanguageFields(ret)
 
         return ret

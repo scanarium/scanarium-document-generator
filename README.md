@@ -116,6 +116,8 @@ Common properties are:
 * `build_day_iso`: The day when the build started, in ISO format.
 * `build_git_description`: A description of the git repository when the build
     started.
+* `build_localizations`: A comma separated list of the localizations that get
+  built.
 
 ## Data model
 

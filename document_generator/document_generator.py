@@ -30,6 +30,7 @@ class DocumentGenerator(object):
         output_dir = conf['target']
         default_l10n = conf['default_l10n']
         other_l10ns = conf['additional_l10ns']
+        l10ns = [default_l10n] + other_l10ns
 
         parser = Parser()
         root_node = parser.parse(markdown_dir)
@@ -40,7 +41,8 @@ class DocumentGenerator(object):
             MarkdownPropertyExtractorFileDecorator(),
             LevelDecorator(),
             DefaultFileNodeDecorator(default_l10n),
-            PropertyDecorator(BuildProperties(markdown_dir).getProperties()),
+            PropertyDecorator(BuildProperties(
+                markdown_dir, l10ns).getProperties()),
             IdDecorator(),
             ValueInjectorFileDecorator(
                 macros=conf.get('macros', {}),

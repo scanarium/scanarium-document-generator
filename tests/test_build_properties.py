@@ -9,7 +9,8 @@ FIXTURE_DIR = os.path.join('tests', 'fixtures')
 
 class BuildPropertiesTest(DocumentPageTestCase):
     def test_properties(self):
-        properties = BuildProperties(FIXTURE_DIR).getProperties()
+        properties = BuildProperties(
+            FIXTURE_DIR, ['foo', 'bar']).getProperties()
 
         seconds = float(properties['build_seconds_since_epoch'])
         self.assertGreater(seconds, 1620822576)
@@ -19,3 +20,5 @@ class BuildPropertiesTest(DocumentPageTestCase):
 
         self.assertIsNotNone(re.search(r'[0-9a-f]{7}',
                                        properties['build_git_description']))
+
+        self.assertEqual(properties['build_localizations'], 'foo,bar')
