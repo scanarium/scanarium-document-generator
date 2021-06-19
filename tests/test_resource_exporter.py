@@ -23,3 +23,13 @@ class ResourceExporterTest(DocumentPageTestCase):
 
             self.assertFileExists(dir, '20-second chapter', 'en.md')
             self.assertLenIs(os.listdir(dir), 1)
+
+    def test_wildcard(self):
+        with self.tempDir() as dir:
+            source_dir = os.path.join(
+                FIXTURE_DIR, 'simple', '20-second chapter', '*')
+            exporter = ResourceExporter([source_dir], dir)
+            exporter.export()
+
+            self.assertFileExists(dir, 'en.md')
+            self.assertLenIs(os.listdir(dir), 1)

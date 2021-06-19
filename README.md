@@ -20,6 +20,8 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
 * `additional_l10ns`: A list of localizations to build in addition to the
     `default_l10n`. (Default: `[]`)
 * `resources`: A list of directories to copy into the target directory.
+    If an entry ends in '*', then all files/directories in that directory get
+    copied as individual resources.
     (Default: [])
 * `exporter`: A dict of settings for exporters. (Default: {}) The following
     key/values are supported:
