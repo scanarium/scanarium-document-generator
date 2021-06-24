@@ -16,6 +16,7 @@ class ValueInjectorFileDecorator(FileDecorator):
             "lower": self.funcLower,
             "macro": self.funcMacro,
             "substring": self.funcSubstring,
+            "upper": self.funcUpper,
             "nodeTitle": self.funcNodeTitle,
             }
 
@@ -48,6 +49,9 @@ class ValueInjectorFileDecorator(FileDecorator):
 
     def funcProperty(self, file, state, args):
         return file['properties'][args[0]]
+
+    def funcUpper(self, file, state, args):
+        return ', '.join(args).upper()
 
     def funcMacro(self, file, state, args):
         name = args[0]

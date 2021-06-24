@@ -391,10 +391,30 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
 
     def test_lower_multiple(self):
         self.assertInjectedMarkdown(
-            '{=lower(FoO,     BAR, baZ)}',
-            'foo, bar, baz')
+            '{=lower(FoO,     BAR, 0123, baZ)}',
+            'foo, bar, 0123, baz')
 
     def test_lower_empty(self):
         self.assertInjectedMarkdown(
             '{=lower()}',
+            '')
+
+    def test_upper_already_upper(self):
+        self.assertInjectedMarkdown(
+            '{=upper(foo)}',
+            'FOO')
+
+    def test_upper_single(self):
+        self.assertInjectedMarkdown(
+            '{=upper(FoO)}',
+            'FOO')
+
+    def test_upper_multiple(self):
+        self.assertInjectedMarkdown(
+            '{=upper(FoO,     bar, 0123, baZ)}',
+            'FOO, BAR, 0123, BAZ')
+
+    def test_upper_empty(self):
+        self.assertInjectedMarkdown(
+            '{=upper()}',
             '')
