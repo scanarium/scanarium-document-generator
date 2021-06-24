@@ -13,6 +13,7 @@ class ValueInjectorFileDecorator(FileDecorator):
         self.macros = macros
         self.funcs = {
             "property": self.funcProperty,
+            "lower": self.funcLower,
             "macro": self.funcMacro,
             "substring": self.funcSubstring,
             "nodeTitle": self.funcNodeTitle,
@@ -41,6 +42,9 @@ class ValueInjectorFileDecorator(FileDecorator):
             if member_name == import_spec['name']:
                 ret = member_value
         return ret
+
+    def funcLower(self, file, state, args):
+        return ', '.join(args).lower()
 
     def funcProperty(self, file, state, args):
         return file['properties'][args[0]]

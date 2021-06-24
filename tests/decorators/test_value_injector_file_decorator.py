@@ -378,3 +378,23 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             properties={'foo': 'bar'})
         self.assertEqual(actual, 'foo-bar-baz')
         self.assertEmpty(decorator.get_messages(state))
+
+    def test_lower_already_lower(self):
+        self.assertInjectedMarkdown(
+            '{=lower(foo)}',
+            'foo')
+
+    def test_lower_single(self):
+        self.assertInjectedMarkdown(
+            '{=lower(FoO)}',
+            'foo')
+
+    def test_lower_multiple(self):
+        self.assertInjectedMarkdown(
+            '{=lower(FoO,     BAR, baZ)}',
+            'foo, bar, baz')
+
+    def test_lower_empty(self):
+        self.assertInjectedMarkdown(
+            '{=lower()}',
+            '')
