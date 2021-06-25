@@ -26,6 +26,9 @@ def parse_arguments(conf):
         help='The source directory for the help content'
         f' (default: {conf["source"]})')
     parser.add_argument(
+        '--debug',
+        help='If `yes`, enable debug mode (default: `no`)')
+    parser.add_argument(
         '--target',
         help='The target directory in which to store the generated help files'
         f' (default: {conf["target"]})')
@@ -55,12 +58,17 @@ def object_string_replace(obj, needle, replacement):
     return ret
 
 
+def conf_to_boolean(string):
+    return string and string.lower() in ['yes', 'y', 'true', 't']
+
+
 if __name__ == "__main__":
     conf = {
         'source': '.',
         'target': 'output',
         'default_l10n': 'en',
         'additional_l10ns': '',
+        'debug': 'no',
     }
     utils = document_generator.Utils()
 
@@ -79,6 +87,7 @@ if __name__ == "__main__":
         ['target', args.target],
         ['default_l10n', args.default_localization],
         ['additional_l10ns', args.additional_localizations],
+        ['debug', args.debug],
     ]:
         if value is not None:
             conf[field] = value
@@ -97,6 +106,11 @@ if __name__ == "__main__":
                 x.strip() for x in conf['additional_l10ns'].split(',')]
         else:
             conf['additional_l10ns'] = []
+
+    for key in [
+                'debug'
+            ]:
+        conf[key] = conf_to_boolean(conf[key])
 
     generator = document_generator.DocumentGenerator()
     errors = generator.run(conf)

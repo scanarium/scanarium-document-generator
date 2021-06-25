@@ -31,6 +31,8 @@ class DocumentGeneratorTest(DocumentPageTestCase):
             self.assertIn('Kapitel 111', contents)
             self.assertIn('Chapter 2', contents)
 
+            self.assertNotIn(os.path.join('simple', 'en.md'), contents)
+
             self.assertEqual(0, errors)
 
     def test_missing_id(self):
@@ -43,12 +45,15 @@ class DocumentGeneratorTest(DocumentPageTestCase):
                     'target': dir,
                     'default_l10n': 'en',
                     'additional_l10ns': ['de'],
+                    'debug': True,
                     }, stderr=capture)
 
             with open(os.path.join(dir, 'all.html.en')) as f:
                 contents = f.read()
             self.assertIn('id="anonymous"', contents)
             self.assertIn('id="chapter-2"', contents)
+            self.assertIn(os.path.join('missing-id', '10-chapter', 'en.md'),
+                          contents)
 
             stderr = capture.getvalue()
             self.assertIn('error', stderr)
