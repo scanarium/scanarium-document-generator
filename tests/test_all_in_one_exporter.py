@@ -48,19 +48,19 @@ class AllInOneExporterTest(DocumentPageTestCase):
             exporter = AllInOneExporter(node1, dir, 'en', ['de'])
             exporter.export()
 
-            with open(os.path.join(dir, 'all.html.en')) as f:
-                contents = f.read()
+            contents = self.get_file_contents(os.path.join(dir, 'all.html.en'))
             self.assertStartsWith(contents, '<html')
             self.assertIn('fooEn', contents)
             self.assertIn('barEn', contents)
             self.assertEndsWith(contents, '</html>')
 
-            with open(os.path.join(dir, 'all.html.de')) as f:
-                contents = f.read()
+            contents = self.get_file_contents(os.path.join(dir, 'all.html.de'))
             self.assertStartsWith(contents, '<html')
             self.assertIn('fooDe', contents)
             self.assertIn('barEn', contents)
             self.assertEndsWith(contents, '</html>')
+
+            self.assertFileContents(os.path.join(dir, 'all.md.de'), 'bacacaca')
 
     def test_template_header(self):
         node1 = {
@@ -90,8 +90,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
             exporter = AllInOneExporter(node1, dir, 'en', [], conf)
             exporter.export()
 
-            with open(os.path.join(dir, 'all.html.en')) as f:
-                contents = f.read()
+            contents = self.get_file_contents(os.path.join(dir, 'all.html.en'))
 
             self.assertStartsWith(contents, 'HEADER')
             self.assertIn('fooEn', contents)
@@ -125,8 +124,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
             exporter = AllInOneExporter(node1, dir, 'en', [], conf)
             exporter.export()
 
-            with open(os.path.join(dir, 'all.html.en')) as f:
-                contents = f.read()
+            contents = self.get_file_contents(os.path.join(dir, 'all.html.en'))
 
             self.assertStartsWith(contents, '<html')
             self.assertIn('fooEn', contents)
@@ -169,8 +167,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
             exporter = AllInOneExporter(node1, dir, 'en', [], conf)
             exporter.export()
 
-            with open(os.path.join(dir, 'all.html.en')) as f:
-                contents = f.read()
+            contents = self.get_file_contents(os.path.join(dir, 'all.html.en'))
 
             self.assertStartsWith(contents, 'HEADER1')
             self.assertIn('HEADER2', contents)
@@ -223,8 +220,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
                 value_injector_state=value_injector_state)
             exporter.export()
 
-            with open(os.path.join(dir, 'all.html.en')) as f:
-                contents = f.read()
+            contents = self.get_file_contents(os.path.join(dir, 'all.html.en'))
 
             self.assertStartsWith(contents, 'HEADER1bar')
             self.assertIn('HEADER2', contents)

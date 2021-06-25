@@ -16,6 +16,11 @@ class DocumentPageTestCase(unittest.TestCase):
         if not os.path.isfile(path):
             self.fail(f'File "{path}" does not exist')
 
+    def get_file_contents(self, file_name, text=True):
+        with open(file_name, 'r' + ('t' if text else 'b')) as file:
+            contents = file.read()
+        return contents
+
     def assertStartsWith(self, haystack, needle):
         if not haystack.startswith(needle):
             self.fail(f'"{haystack}" does not start with "{needle}"')
