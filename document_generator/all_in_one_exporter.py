@@ -98,3 +98,7 @@ class AllInOneExporter(object):
                 f.write(header)
                 f.write(renderer.render(markdown))
                 f.write(footer)
+
+            file = os.path.join(self.output_dir, f'all.md.{l10n}')
+            with open(file, 'w+') as f:
+                f.write(markdown)

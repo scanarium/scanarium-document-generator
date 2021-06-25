@@ -21,6 +21,10 @@ class DocumentPageTestCase(unittest.TestCase):
             contents = file.read()
         return contents
 
+    def assertFileContents(self, file_name, expected):
+        actual = self.get_file_contents(file_name)
+        self.assertEqual(actual, expected)
+
     def assertStartsWith(self, haystack, needle):
         if not haystack.startswith(needle):
             self.fail(f'"{haystack}" does not start with "{needle}"')

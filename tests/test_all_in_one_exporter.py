@@ -60,7 +60,13 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertIn('barEn', contents)
             self.assertEndsWith(contents, '</html>')
 
-            self.assertFileContents(os.path.join(dir, 'all.md.de'), 'bacacaca')
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            self.assertStartsWith(contents, 'barEn')
+            self.assertEndsWith(contents, 'fooEn')
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.de'))
+            self.assertStartsWith(contents, 'barEn')
+            self.assertEndsWith(contents, 'fooDe')
 
     def test_template_header(self):
         node1 = {
@@ -96,6 +102,8 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertIn('fooEn', contents)
             self.assertEndsWith(contents, '</html>')
 
+            self.assertFileContents(os.path.join(dir, 'all.md.en'), 'fooEn')
+
     def test_template_footer(self):
         node1 = {
             'files': {
@@ -129,6 +137,8 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertStartsWith(contents, '<html')
             self.assertIn('fooEn', contents)
             self.assertEndsWith(contents, 'FOOTER')
+
+            self.assertFileContents(os.path.join(dir, 'all.md.en'), 'fooEn')
 
     def test_template_file(self):
         node1 = {
@@ -176,6 +186,8 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertEndsWith(contents, 'FOOTER2')
 
             self.assertNotIn('OMITTED', contents)
+
+            self.assertFileContents(os.path.join(dir, 'all.md.en'), 'fooEn')
 
     def test_properties(self):
         node1 = {
@@ -229,3 +241,5 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertEndsWith(contents, 'FOOTER2')
 
             self.assertNotIn('OMITTED', contents)
+
+            self.assertFileContents(os.path.join(dir, 'all.md.en'), 'fooEn')
