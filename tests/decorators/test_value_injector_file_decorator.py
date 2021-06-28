@@ -167,6 +167,12 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             '|bar, baz, quux, quuux|',
             macros={'foo': '|$*|'})
 
+    def test_macro_number_in_name(self):
+        self.assertInjectedMarkdown(
+            'foo-{=macro(b4r)}-baz',
+            'foo-quux-baz',
+            macros={'b4r': 'quux'})
+
     def test_external_function_loading_single(self):
         self.assertInjectedMarkdown(
             '{=upper(foo)}',
