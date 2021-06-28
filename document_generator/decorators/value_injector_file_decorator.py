@@ -105,7 +105,7 @@ class ValueInjectorFileDecorator(FileDecorator):
         while current not in old_values:
             old_values.append(current)
             current = re.sub(
-                r'{\s*=\s*([a-zA-Z]+)\s*\(([^){]*)\)\s*}',
+                r'{\s*=\s*([a-zA-Z]+)\s*\((([^){]|{\s*[^)=\s])*)\)\s*}',
                 replacement,
                 current)
         file['markdown'] = current

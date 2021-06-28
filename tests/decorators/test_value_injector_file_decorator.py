@@ -239,6 +239,17 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
             '{=substring(FooBarBazQuux, , )}',
             'FooBarBazQuux')
 
+    def test_substring_nested_curly_brace(self):
+        self.assertInjectedMarkdown(
+            '{=substring(foo{bar},4, 7)}',
+            'bar')
+
+    def test_substring_nested_property(self):
+        self.assertInjectedMarkdown(
+            '{=substring(foo{=property(bar)},3, 7)}',
+            'quux',
+            {'bar': 'quux'})
+
     def test_nodeTitle_plain(self):
         node = {
             'files': {
