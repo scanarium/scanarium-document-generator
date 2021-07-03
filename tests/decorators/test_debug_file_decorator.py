@@ -10,49 +10,65 @@ class DebugFileDecoratorTest(DocumentPageTestCase):
     def test_empty(self):
         file = {
             'markdown': '',
+            'id': 'foo',
             'file_name': 'quux',
             }
 
         self.decorate(file)
 
-        self.assertEqual(file['markdown'], '\n\nquux\n{: class=source-file}\n')
+        expected = '\n'
+        expected += '\nid: foo\n{: class=node-id}\n'
+        expected += '\nquux\n{: class=source-file}\n'
+        self.assertEqual(file['markdown'], expected)
 
     def test_single_line(self):
         file = {
             'markdown': 'foo',
+            'id': 'bar',
             'file_name': 'quux',
             }
 
         self.decorate(file)
 
-        self.assertEqual(file['markdown'],
-                         'foo\n\nquux\n{: class=source-file}\n')
+        expected = 'foo\n'
+        expected += '\nid: bar\n{: class=node-id}\n'
+        expected += '\nquux\n{: class=source-file}\n'
+        self.assertEqual(file['markdown'], expected)
 
     def test_two_lines(self):
         file = {
             'markdown': 'foo\nbar',
+            'id': 'baz',
             'file_name': 'quux',
             }
 
         self.decorate(file)
 
-        self.assertEqual(file['markdown'],
-                         'foo\n\nquux\n{: class=source-file}\n\nbar')
+        expected = 'foo\n'
+        expected += '\nid: baz\n{: class=node-id}\n'
+        expected += '\nquux\n{: class=source-file}\n'
+        expected += '\nbar'
+        self.assertEqual(file['markdown'], expected)
 
     def test_plain(self):
         file = {
             'markdown': 'foo\nbar\nbaz',
+            'id': 'quuux',
             'file_name': 'quux',
             }
 
         self.decorate(file)
 
-        self.assertEqual(file['markdown'],
-                         'foo\n\nquux\n{: class=source-file}\n\nbar\nbaz')
+        expected = 'foo\n'
+        expected += '\nid: quuux\n{: class=node-id}\n'
+        expected += '\nquux\n{: class=source-file}\n'
+        expected += '\nbar\nbaz'
+        self.assertEqual(file['markdown'], expected)
 
     def test_disabled(self):
         file = {
             'markdown': 'foo\nbar\nbaz',
+            'id': 'quuux',
             'file_name': 'quux',
             }
 
