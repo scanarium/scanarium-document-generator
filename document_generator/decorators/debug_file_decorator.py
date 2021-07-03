@@ -11,9 +11,9 @@ class DebugFileDecorator(Decorator):
             file_name = file['file_name']
             content = [
                 '',
-                f'id: {file["id"]}', '{: class=node-id}',
+                f'id: {file["id"]}', '{: class=debug-node-id}',
                 '',
-                f'{file_name}', '{: class=source-file}',
+                f'{file_name}', '{: class=debug-source-file}',
                 '',
                 ]
             file['markdown'] = '\n'.join(

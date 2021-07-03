@@ -17,8 +17,8 @@ class DebugFileDecoratorTest(DocumentPageTestCase):
         self.decorate(file)
 
         expected = '\n'
-        expected += '\nid: foo\n{: class=node-id}\n'
-        expected += '\nquux\n{: class=source-file}\n'
+        expected += '\nid: foo\n{: class=debug-node-id}\n'
+        expected += '\nquux\n{: class=debug-source-file}\n'
         self.assertEqual(file['markdown'], expected)
 
     def test_single_line(self):
@@ -31,8 +31,8 @@ class DebugFileDecoratorTest(DocumentPageTestCase):
         self.decorate(file)
 
         expected = 'foo\n'
-        expected += '\nid: bar\n{: class=node-id}\n'
-        expected += '\nquux\n{: class=source-file}\n'
+        expected += '\nid: bar\n{: class=debug-node-id}\n'
+        expected += '\nquux\n{: class=debug-source-file}\n'
         self.assertEqual(file['markdown'], expected)
 
     def test_two_lines(self):
@@ -45,8 +45,8 @@ class DebugFileDecoratorTest(DocumentPageTestCase):
         self.decorate(file)
 
         expected = 'foo\n'
-        expected += '\nid: baz\n{: class=node-id}\n'
-        expected += '\nquux\n{: class=source-file}\n'
+        expected += '\nid: baz\n{: class=debug-node-id}\n'
+        expected += '\nquux\n{: class=debug-source-file}\n'
         expected += '\nbar'
         self.assertEqual(file['markdown'], expected)
 
@@ -60,8 +60,8 @@ class DebugFileDecoratorTest(DocumentPageTestCase):
         self.decorate(file)
 
         expected = 'foo\n'
-        expected += '\nid: quuux\n{: class=node-id}\n'
-        expected += '\nquux\n{: class=source-file}\n'
+        expected += '\nid: quuux\n{: class=debug-node-id}\n'
+        expected += '\nquux\n{: class=debug-source-file}\n'
         expected += '\nbar\nbaz'
         self.assertEqual(file['markdown'], expected)
 
