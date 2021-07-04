@@ -105,6 +105,11 @@ Common properties are:
 * `id`: This value gets used as `id` attribute this node to in HTML. This allows
     to format stable anchors in HTML. It suffices to set `id` in the default
     language. Other languages inhert it from there.
+* `sort-key`: The key by which to sort. If empty, it defaults to
+    `{node-dir-name}'. In the sort key `{node-dir-name}` expands to the
+    lower-cased name of the directory the file is in (E.g.: if the file is
+    `Foo/Bar/en.md`, then `{node-dir-name}` would be `bar`). `title` expands to
+    the lower-cased title for the file.
 * `version`: A number that describes the version of the content. For updates
     that change the content, increase this number, so tooling can identify that
     translations of the content need to get updated as well. For typo fixes,

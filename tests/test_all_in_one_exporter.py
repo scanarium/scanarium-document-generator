@@ -13,18 +13,23 @@ class AllInOneExporterTest(DocumentPageTestCase):
             'files': {
                 'en': {
                     'markdown': 'fooEn',
+                    'properties': {},
                     },
                 'de': {
                     'markdown': 'fooDe',
+                    'properties': {},
                     },
                 'fr': {
                     'markdown': 'fooFr',
+                    'properties': {},
                     },
             },
+            'name': 'node111',
             'subnodes': [],
         }
         node11 = {
             'files': {},
+            'name': 'node11',
             'subnodes': [node111],
         }
         node1 = {
@@ -42,6 +47,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
                     'properties': {},
                     },
             },
+            'name': 'node1',
             'subnodes': [node11],
         }
         with self.tempDir() as dir:
@@ -80,6 +86,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
                     'properties': {},
                     },
                 },
+            'name': 'node1',
             'subnodes': [],
             }
 
@@ -116,6 +123,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
                     'properties': {},
                     },
                 },
+            'name': 'node1',
             'subnodes': [],
             }
 
@@ -152,6 +160,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
                     'properties': {},
                     },
                 },
+            'name': 'node1',
             'subnodes': [],
             }
 
@@ -203,6 +212,7 @@ class AllInOneExporterTest(DocumentPageTestCase):
                     'properties': {},
                     },
                 },
+            'name': 'node1',
             'subnodes': [],
             }
 
@@ -243,3 +253,171 @@ class AllInOneExporterTest(DocumentPageTestCase):
             self.assertNotIn('OMITTED', contents)
 
             self.assertFileContents(os.path.join(dir, 'all.md.en'), 'fooEn')
+
+    def test_sorting_default_key(self):
+        node11 = {
+            'files': {'en': {'markdown': 'NODE11', 'properties': {}}},
+            'name': 'Z',
+            'subnodes': [],
+        }
+        node12 = {
+            'files': {'en': {'markdown': 'NODE12', 'properties': {}}},
+            'name': 'A',
+            'subnodes': [],
+        }
+        node13 = {
+            'files': {'en': {'markdown': 'NODE13', 'properties': {}}},
+            'name': 'b',
+            'subnodes': [],
+        }
+        node1 = {
+            'files': {
+                'en': {'markdown': 'RootEn', 'properties': {}},
+                'default': {'markdown': 'RootDefault', 'properties': {}},
+                },
+            'name': 'node1',
+            'subnodes': [node11, node12, node13],
+        }
+        with self.tempDir() as dir:
+            exporter = AllInOneExporter(node1, dir, 'en', [])
+            exporter.export()
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            self.assertIn('RootEn\n\nNODE12\n\nNODE13\n\nNODE11', contents)
+
+    def test_sorting_fixed_key(self):
+        node11 = {
+            'files': {'en': {'markdown': 'NODE11', 'properties': {
+                        'sort-key': 'Z'}}},
+            'name': 'node11',
+            'subnodes': [],
+        }
+        node12 = {
+            'files': {'en': {'markdown': 'NODE12', 'properties': {
+                        'sort-key': 'A'}}},
+            'name': 'node12',
+            'subnodes': [],
+        }
+        node13 = {
+            'files': {'en': {'markdown': 'NODE13', 'properties': {
+                        'sort-key': 'b'}}},
+            'name': 'node13',
+            'subnodes': [],
+        }
+        node1 = {
+            'files': {
+                'en': {'markdown': 'RootEn', 'properties': {}},
+                'default': {'markdown': 'RootDefault', 'properties': {}},
+                },
+            'name': 'node1',
+            'subnodes': [node11, node12, node13],
+        }
+        with self.tempDir() as dir:
+            exporter = AllInOneExporter(node1, dir, 'en', [])
+            exporter.export()
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            # NODE11 before NODE13 as keys are compared case sensitive
+            self.assertIn('RootEn\n\nNODE12\n\nNODE11\n\nNODE13', contents)
+
+    def test_sorting_node_dir_name(self):
+        node11 = {
+            'files': {'en': {'markdown': 'NODE11', 'properties': {
+                        'sort-key': '{node-dir-name}'}}},
+            'name': 'Z',
+            'subnodes': [],
+        }
+        node12 = {
+            'files': {'en': {'markdown': 'NODE12', 'properties': {
+                        'sort-key': '{node-dir-name}'}}},
+            'name': 'A',
+            'subnodes': [],
+        }
+        node13 = {
+            'files': {'en': {'markdown': 'NODE13', 'properties': {
+                        'sort-key': '{node-dir-name}'}}},
+            'name': 'b',
+            'subnodes': [],
+        }
+        node1 = {
+            'files': {
+                'en': {'markdown': 'RootEn', 'properties': {}},
+                'default': {'markdown': 'RootDefault', 'properties': {}},
+                },
+            'name': 'node1',
+            'subnodes': [node11, node12, node13],
+        }
+        with self.tempDir() as dir:
+            exporter = AllInOneExporter(node1, dir, 'en', [])
+            exporter.export()
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            self.assertIn('RootEn\n\nNODE12\n\nNODE13\n\nNODE11', contents)
+
+    def test_sorting_title(self):
+        node11 = {
+            'files': {'en': {'markdown': 'NODE11', 'properties': {
+                        'sort-key': '{title}'}}},
+            'name': 'Z',
+            'subnodes': [],
+        }
+        node12 = {
+            'files': {'en': {'markdown': '## NODE12', 'properties': {
+                        'sort-key': '{title}'}}},
+            'name': 'A',
+            'subnodes': [],
+        }
+        node13 = {
+            'files': {'en': {'markdown': 'NODE13', 'properties': {
+                        'sort-key': '{title}'}}},
+            'name': 'b',
+            'subnodes': [],
+        }
+        node1 = {
+            'files': {
+                'en': {'markdown': 'RootEn', 'properties': {}},
+                'default': {'markdown': 'RootDefault', 'properties': {}},
+                },
+            'name': 'node1',
+            'subnodes': [node11, node12, node13],
+        }
+        with self.tempDir() as dir:
+            exporter = AllInOneExporter(node1, dir, 'en', [])
+            exporter.export()
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            self.assertIn('RootEn\n\nNODE11\n\n## NODE12\n\nNODE13', contents)
+
+    def test_sorting_mixed(self):
+        node11 = {
+            'files': {'en': {'markdown': 'NODE11', 'properties': {
+                        'sort-key': '{node-dir-name}'}}},
+            'name': 'Z',
+            'subnodes': [],
+        }
+        node12 = {
+            'files': {'en': {'markdown': 'NODE12', 'properties': {
+                        'sort-key': '{title}'}}},
+            'name': 'A',
+            'subnodes': [],
+        }
+        node13 = {
+            'files': {'en': {'markdown': 'NODE13', 'properties': {
+                        'sort-key': 'B'}}},
+            'name': 'M',
+            'subnodes': [],
+        }
+        node1 = {
+            'files': {
+                'en': {'markdown': 'RootEn', 'properties': {}},
+                'default': {'markdown': 'RootDefault', 'properties': {}},
+                },
+            'name': 'node1',
+            'subnodes': [node11, node12, node13],
+        }
+        with self.tempDir() as dir:
+            exporter = AllInOneExporter(node1, dir, 'en', [])
+            exporter.export()
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            self.assertIn('RootEn\n\nNODE13\n\nNODE12\n\nNODE11', contents)

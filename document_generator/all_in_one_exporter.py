@@ -2,6 +2,7 @@ import os
 
 from .document_generator_error import DocumentGeneratorError
 from .markdown_renderer import MarkdownRenderer
+from .decorators import Utils
 
 HEADER = '<html><meta>' \
     '<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />' \
@@ -20,6 +21,7 @@ class AllInOneExporter(object):
         self.footer = FOOTER
         self.value_injector = value_injector
         self.value_injector_state = value_injector_state
+        self.utils = Utils()
 
         if 'html-template-file' in conf:
             with open(conf['html-template-file'], 'rt') as f:
@@ -53,7 +55,9 @@ class AllInOneExporter(object):
                 self.footer = f.read()
 
     def _get_full_markdown(self, node, l10n):
-        ret = ''
+        markdown = ''
+        title = '(anonymous)'
+        sort_key = ''
 
         files = node['files']
         if files:
@@ -69,12 +73,32 @@ class AllInOneExporter(object):
                         f'{node["name"]} and default "{self.default_l10n}" '
                         f'does not exist either')
 
-            ret = file['markdown']
+            markdown = file['markdown']
 
+            title = self.utils.extract_title(markdown)
+
+            sort_key = file['properties'].get('sort-key', sort_key).strip()
+
+        if not sort_key:
+            sort_key = '{node-dir-name}'
+        sort_key = sort_key.replace('{node-dir-name}',
+                                    os.path.basename(node['name']).lower())
+        sort_key = sort_key.replace('{title}', title.lower())
+
+        capsules = []
         for subnode in node['subnodes']:
-            ret += '\n\n' + self._get_full_markdown(subnode, l10n)
+            capsules.append(self._get_full_markdown(subnode, l10n))
 
-        return ret
+        capsules.sort(key=lambda e: e['sort_key'])
+
+        for capsule in capsules:
+            markdown += '\n\n' + capsule['markdown']
+
+        return {
+            'sort_key': sort_key,
+            'title': title,
+            'markdown': markdown
+            }
 
     def inject_values(self, text, l10n, properties):
         ret = text
@@ -92,7 +116,9 @@ class AllInOneExporter(object):
             header = self.inject_values(self.header, l10n, properties)
             footer = self.inject_values(self.footer, l10n, properties)
 
-            markdown = self._get_full_markdown(self.root_node, l10n)
+            capsule = self._get_full_markdown(self.root_node, l10n)
+            markdown = capsule['markdown']
+
             file = os.path.join(self.output_dir, f'all.html.{l10n}')
             with open(file, 'w+') as f:
                 f.write(header)
