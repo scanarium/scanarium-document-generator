@@ -3,6 +3,7 @@ import os
 from .document_generator_error import DocumentGeneratorError
 from .markdown_renderer import MarkdownRenderer
 from .decorators import Utils
+from .decorators import ValueInjectorFileDecorator
 
 HEADER = '<html><meta>' \
     '<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />' \
@@ -22,6 +23,8 @@ class AllInOneExporter(object):
         self.value_injector = value_injector
         self.value_injector_state = value_injector_state
         self.utils = Utils()
+        self.value_injector = ValueInjectorFileDecorator()
+        self.value_injector_state = self.value_injector.init_state(root_node)
 
         if 'html-template-file' in conf:
             with open(conf['html-template-file'], 'rt') as f:
@@ -55,6 +58,7 @@ class AllInOneExporter(object):
                 self.footer = f.read()
 
     def _get_full_markdown(self, node, l10n):
+        id = None
         markdown = ''
         title = '(anonymous)'
         sort_key = ''
@@ -73,6 +77,12 @@ class AllInOneExporter(object):
                         f'{node["name"]} and default "{self.default_l10n}" '
                         f'does not exist either')
 
+            try:
+                id = file['properties']['id']
+            except KeyError:
+                # There's no id here. Since we're not enforcing ids, we prod on
+                # without it.
+                pass
             markdown = file['markdown']
 
             title = self.utils.extract_title(markdown)
@@ -91,10 +101,28 @@ class AllInOneExporter(object):
 
         capsules.sort(key=lambda e: e['sort_key'])
 
+        def linkedToc(file, state, args):
+            ret = '\n'
+            for capsule in capsules:
+                capsule_id = capsule["id"]
+                ret += '\n* '
+                if capsule_id:
+                    ret += f'[{capsule["title"]}](#{capsule_id})'
+                else:
+                    ret += capsule["title"]
+            ret += '\n\n'
+            return ret
+
+        markdown = self.value_injector.decorate_text(
+            markdown, self.value_injector_state, funcs={
+                'linkedToc': linkedToc,
+                })
+
         for capsule in capsules:
             markdown += '\n\n' + capsule['markdown']
 
         return {
+            'id': id,
             'sort_key': sort_key,
             'title': title,
             'markdown': markdown

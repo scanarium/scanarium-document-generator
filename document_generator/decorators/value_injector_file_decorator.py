@@ -86,12 +86,15 @@ class ValueInjectorFileDecorator(FileDecorator):
 
         return title_map[lang]
 
-    def decorate_file(self, file, state):
+    def _decorate_file_w_funcs(self, file, state, funcs=None):
+        if funcs is None:
+            funcs = self.funcs
+
         def replacement(match):
             ret = match.group(0)
             func_name = match.group(1)
             try:
-                func = self.funcs[func_name]
+                func = funcs[func_name]
                 args = [x.strip() for x in match.group(2).split(',')]
                 ret = func(file, state, args)
             except Exception:
@@ -110,13 +113,17 @@ class ValueInjectorFileDecorator(FileDecorator):
                 current)
         file['markdown'] = current
 
-    def decorate_text(self, text, state, key='default', properties={}):
+    def decorate_file(self, file, state):
+        self._decorate_file_w_funcs(file, state)
+
+    def decorate_text(self, text, state, key='default', properties={},
+                      funcs=None):
         file = {
             'markdown': text,
             'properties': properties,
             'key': key,
             }
 
-        self.decorate_file(file, state)
+        self._decorate_file_w_funcs(file, state, funcs)
 
         return file['markdown']

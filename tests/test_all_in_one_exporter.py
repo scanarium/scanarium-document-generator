@@ -421,3 +421,79 @@ class AllInOneExporterTest(DocumentPageTestCase):
 
             contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
             self.assertIn('RootEn\n\nNODE13\n\nNODE12\n\nNODE11', contents)
+
+    def test_linked_toc_empty(self):
+        node1 = {
+            'files': {
+                'en': {'markdown': 'RootEn\n\nFOO{=linkedToc()}BAR',
+                       'properties': {}},
+                'default': {'markdown': 'RootDefault', 'properties': {}},
+                },
+            'name': 'node1',
+            'subnodes': [],
+        }
+        with self.tempDir() as dir:
+            exporter = AllInOneExporter(node1, dir, 'en', [])
+            exporter.export()
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            self.assertEqual(contents.split('\n'), [
+                    'RootEn',
+                    '',
+                    'FOO',
+                    '',
+                    '',
+                    'BAR',
+                    ])
+
+    def test_linked_toc_simple(self):
+        node11 = {
+            'files': {'en': {'markdown': 'NODE11', 'properties': {}}},
+            'name': 'Z',
+            'subnodes': [],
+        }
+        node12 = {
+            'files': {'en': {'markdown': 'NODE12\nbar', 'properties': {
+                        'id': 'quuux'}}},
+            'name': 'A',
+            'subnodes': [],
+        }
+        node13 = {
+            'files': {'en': {'markdown': 'NODE13\n\nquux', 'properties': {}}},
+            'name': 'M',
+            'subnodes': [],
+        }
+        node1 = {
+            'files': {
+                'en': {'markdown': 'RootEn\n\nFOO{=linkedToc()}BAR',
+                       'properties': {}},
+                'default': {'markdown': 'RootDefault', 'properties': {}},
+                },
+            'name': 'node1',
+            'subnodes': [node11, node12, node13],
+        }
+        with self.tempDir() as dir:
+            exporter = AllInOneExporter(node1, dir, 'en', [])
+            exporter.export()
+
+            contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
+            self.assertEqual(contents.split('\n'), [
+                    'RootEn',
+                    '',
+                    'FOO',
+                    '',
+                    '* [NODE12](#quuux)',
+                    '* NODE13',
+                    '* NODE11',
+                    '',
+                    'BAR',
+                    '',
+                    'NODE12',
+                    'bar',
+                    '',
+                    'NODE13',
+                    '',
+                    'quux',
+                    '',
+                    'NODE11',
+                    ])

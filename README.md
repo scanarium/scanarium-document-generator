@@ -168,6 +168,7 @@ A file's markdown gets mangled in a few ways.
 1. Properties are cut off from the bottom of the contents. (See `MarkdownPropertyExtractorFileDecorator`)
 1. Values are injected. (See the [Injected values section](#injected-values), and `ValueInjectorFileDecorator`)
 1. The hierarchy level in the title is adjusted and the id is set (See `HeaderFileDecorator`)
+1. During export, values relating to subnodes are injected (e.g. linkedToc) (See `AllInOneExporter`)
 
 #### Injected values
 
@@ -180,6 +181,7 @@ denotes the function to arrive at the injected values. Arguments `arg1`,
 | `property` | The property `arg1` from this file's properties gets injected |
 | `macro` | The value of macro `arg1` (see [`macros` in `config.json`](#format-of-configjson) gets injected with args `(args2, args3,…)` as arguments. Note that `arg1` is the macro name, so `arg2` is the first argument to the macro, `arg3` the second, and so on. |
 | `nodeTitle` | The title of the node with id `arg1` in the language `arg2` (or the language of the current file, if `arg2` is omitted). If the node does not have a title in that language, the title in the default language is used instead. |
+| `linkedToc` | Inserts a linked table of contents over the nodes subnodes. |
 | `lower` | Converts the arguments to lowercase. |
 | `substring` | All but the last two arguments get concatenated by `, `. And of that string, the substring `[argN:arg(N-1)]` is taken. So for example `{=substring(fooQUUXquuux, 3, 7)}` will inject `QUUX`. Both `argN` and `arg(N-1)` may be positive, negative, or missing and follow the usual conventions of Python's slice notation. This is especially useful to take substrings of arguments in macros.|
 | `upper` | Converts the arguments to uppercase. |
