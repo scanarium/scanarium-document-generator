@@ -1,27 +1,23 @@
 from .file_decorator import FileDecorator
+from .utils import Utils
 
 
 class IdTitleCollectorFileDecorator(FileDecorator):
+    def __init__(self, initial_state={}):
+        self.utils = Utils()
+        self.initial_state = initial_state
+
     def init_state(self, node):
         state = super().init_state(node)
         state['id-title-map'] = {}
         return state
 
     def decorate_file(self, file, state):
-        markdown_lines = file['markdown'].split('\n')
-        title = ''
-        while not title and markdown_lines:
-            title = markdown_lines[0].strip()
-            del markdown_lines[0]
+        title = self.utils.extract_title(file['markdown'])
 
         if not title:
             title = '(anonymous)'
             self.add_error(state, 'Failed to determine title')
-
-        while title.startswith('#'):
-            title = title[1:].strip()
-
-        title = title.split('{:', 1)[0].strip()
 
         id_title_map = state['id-title-map']
         id = file['id']

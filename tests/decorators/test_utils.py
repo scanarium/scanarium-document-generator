@@ -89,3 +89,27 @@ class DefaultFileNodeDecoratorTest(DocumentPageTestCase):
                 'fooxxx': 'barxxx',
                 'zzz': 'ZZZ',
                 })
+
+    def test_extract_title_empty(self):
+        actual = Utils().extract_title('')
+        self.assertEqual(actual, '')
+
+    def test_extract_title_only_title(self):
+        actual = Utils().extract_title('foo')
+        self.assertEqual(actual, 'foo')
+
+    def test_extract_title_paragraphs(self):
+        actual = Utils().extract_title('foo\n\nbar')
+        self.assertEqual(actual, 'foo')
+
+    def test_extract_title_multiline(self):
+        actual = Utils().extract_title('foo\nbar')
+        self.assertEqual(actual, 'foo')
+
+    def test_extract_title_marker_stripping(self):
+        actual = Utils().extract_title('## # # foo\nbar')
+        self.assertEqual(actual, 'foo')
+
+    def test_extract_title_attribute_stripping(self):
+        actual = Utils().extract_title('foo {: class=quux}\nbar')
+        self.assertEqual(actual, 'foo')

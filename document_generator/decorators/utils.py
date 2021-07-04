@@ -15,6 +15,23 @@ class Utils(object):
                 target[key] = source[key]
         return target
 
+    def extract_title(self, markdown):
+        markdown_lines = markdown.split('\n')
+        title = ''
+
+        while not title and markdown_lines:
+            title = markdown_lines[0].strip()
+            del markdown_lines[0]
+
+        if title:
+            while title.startswith('#'):
+                title = title[1:].strip()
+
+        if title:
+            title = title.split('{:', 1)[0].strip()
+
+        return title
+
     def run_command(self, command):
         process = subprocess.run(command,
                                  check=True,
