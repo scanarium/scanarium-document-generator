@@ -435,3 +435,38 @@ class ValueInjectorFileDecoratorTest(DocumentPageTestCase):
         self.assertInjectedMarkdown(
             '{=upper()}',
             '')
+
+    def test_shift_empty(self):
+        self.assertInjectedMarkdown(
+            'foo{=shift()}baz',
+            'foobaz')
+
+    def test_shift_single(self):
+        self.assertInjectedMarkdown(
+            'foo{=shift(bar)}baz',
+            'foobaz')
+
+    def test_shift_two(self):
+        self.assertInjectedMarkdown(
+            'foo{=shift(bar, quux)}baz',
+            'fooquuxbaz')
+
+    def test_shift_multiple(self):
+        self.assertInjectedMarkdown(
+            'foo{=shift(bar, quux, quuux)}baz',
+            'fooquux, quuuxbaz')
+
+    def test_shift_macro(self):
+        self.assertInjectedMarkdown(
+            'foo{=macro(link, one, two, three)}baz',
+            'foo[two, three](#one)baz',
+            macros={'link': '[{=shift($*)}](#$1)'})
+
+    def test_shift_nested_macro(self):
+        self.assertInjectedMarkdown(
+            'foo{=macro(wrapper, one, two, three, four, five)}baz',
+            'foo{one, two, three, four, five}[three, four](#two)baz',
+            macros={
+                'link': '[{=shift($*)}](#$1)',
+                'wrapper': '{$1, $2, $3, $4, $5}{=macro(link, $2, $3, $4)}',
+                })

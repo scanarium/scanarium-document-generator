@@ -183,6 +183,7 @@ denotes the function to arrive at the injected values. Arguments `arg1`,
 | `nodeTitle` | The title of the node with id `arg1` in the language `arg2` (or the language of the current file, if `arg2` is omitted). If the node does not have a title in that language, the title in the default language is used instead. |
 | `linkedToc` | Inserts a linked table of contents over the nodes subnodes. |
 | `lower` | Converts the arguments to lowercase. |
+| `shift` | Returns the arguments after discarding the first one. |
 | `subnodeCount` | The number of subnodes of the current node. |
 | `substring` | All but the last two arguments get concatenated by `, `. And of that string, the substring `[argN:arg(N-1)]` is taken. So for example `{=substring(fooQUUXquuux, 3, 7)}` will inject `QUUX`. Both `argN` and `arg(N-1)` may be positive, negative, or missing and follow the usual conventions of Python's slice notation. This is especially useful to take substrings of arguments in macros.|
 | `upper` | Converts the arguments to uppercase. |

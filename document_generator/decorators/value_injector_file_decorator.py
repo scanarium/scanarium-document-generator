@@ -15,6 +15,7 @@ class ValueInjectorFileDecorator(FileDecorator):
             "property": self.funcProperty,
             "lower": self.funcLower,
             "macro": self.funcMacro,
+            "shift": self.funcShift,
             "substring": self.funcSubstring,
             "upper": self.funcUpper,
             "nodeTitle": self.funcNodeTitle,
@@ -72,6 +73,9 @@ class ValueInjectorFileDecorator(FileDecorator):
         end = int(args[-1]) if args[-1] else None
         start = int(args[-2]) if args[-2] else None
         return ', '.join(args[0:-2])[start:end]
+
+    def funcShift(self, file, state, args):
+        return ', '.join(args[1:])
 
     def funcNodeTitle(self, file, state, args):
         id = args[0]
