@@ -23,8 +23,6 @@ class AllInOneExporter(object):
         self.value_injector = value_injector
         self.value_injector_state = value_injector_state
         self.utils = Utils()
-        self.value_injector = ValueInjectorFileDecorator()
-        self.value_injector_state = self.value_injector.init_state(root_node)
 
         if 'html-template-file' in conf:
             with open(conf['html-template-file'], 'rt') as f:
