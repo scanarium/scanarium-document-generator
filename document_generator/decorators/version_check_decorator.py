@@ -22,7 +22,7 @@ class VersionCheckDecorator(Decorator):
     def get_major_version(self, version):
         return version.split('.')[0].strip()
 
-    def handle_version_mismatch(self, node_version, file_version, state):
+    def handle_version_mismatch(self, node_version, file_version, file, state):
         message = f'Mismatch in major version. Node has {node_version}. ' \
             f'File has {file_version}'
         for action in self.actions:
@@ -33,6 +33,10 @@ class VersionCheckDecorator(Decorator):
                 pass
             elif action == 'warning':
                 self.add_warning(state, message)
+            elif action.startswith('append-macro-'):
+                macro_name = action[13:]
+                macro_line = f'{{=macro({macro_name}, {message})}}'
+                file['markdown'] += '\n' + macro_line
             else:
                 self.add_error(
                     state,
@@ -45,7 +49,8 @@ class VersionCheckDecorator(Decorator):
             file_version = file['properties']['version']
             file_major_version = self.get_major_version(file_version)
             if node_major_version != file_major_version:
-                self.handle_version_mismatch(node_version, file_version, state)
+                self.handle_version_mismatch(
+                    node_version, file_version, file, state)
 
     def decorate_node_exit(self, node, state):
         del state['parent_versions'][-1]

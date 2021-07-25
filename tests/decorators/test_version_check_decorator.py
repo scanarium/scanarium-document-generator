@@ -1,3 +1,6 @@
+import copy
+
+
 from tests import DocumentPageTestCase
 from document_generator.decorators import VersionCheckDecorator
 
@@ -7,12 +10,16 @@ MAJOR_VERSION_MISMATCH_NODE = {
             'key': 'en',
             'properties': {
                 'version': '11.003',
-                }},
+                },
+            'markdown': 'fileEn',
+            },
         'default': {
             'key': 'de',
             'properties': {
-                'version': '1.003',
-                }},
+                'version': '2.003',
+                },
+            'markdown': 'fileDefault',
+            },
         },
     'subnodes': [],
     }
@@ -24,9 +31,10 @@ class VersionCheckDecoratorTest(DocumentPageTestCase):
             decorator = VersionCheckDecorator()
         else:
             decorator = VersionCheckDecorator(actions=actions)
+        node = copy.deepcopy(node)
         state = decorator.init_state(node)
         decorator.run(node, state)
-        return decorator.get_messages(state)
+        return node, decorator.get_messages(state)
 
     def test_no_files(self):
         node = {
@@ -34,7 +42,7 @@ class VersionCheckDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
             }
 
-        messages = self.run_decorator(node)
+        _, messages = self.run_decorator(node)
         self.assertEmpty(messages)
 
     def test_full_match(self):
@@ -54,7 +62,7 @@ class VersionCheckDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
         }
 
-        messages = self.run_decorator(node)
+        _, messages = self.run_decorator(node)
         self.assertEmpty(messages)
 
     def test_mismatch_minor(self):
@@ -74,36 +82,60 @@ class VersionCheckDecoratorTest(DocumentPageTestCase):
             'subnodes': [],
         }
 
-        messages = self.run_decorator(node)
+        _, messages = self.run_decorator(node)
         self.assertEmpty(messages)
 
     def test_mismatch_major_default(self):
-        messages = self.run_decorator(MAJOR_VERSION_MISMATCH_NODE)
+        node, messages = self.run_decorator(MAJOR_VERSION_MISMATCH_NODE)
         self.assertLenIs(messages, 1)
         self.assertIn('ismatch', str(messages[0]['text']))
         self.assertEqual('error', messages[0]['kind'])
 
+        self.assertStartsWith(node['files']['en']['markdown'], 'fileEn')
+        self.assertStartsWith(node['files']['default']['markdown'], 'fileDef')
+
     def test_mismatch_major_action_error(self):
-        messages = self.run_decorator(
+        node, messages = self.run_decorator(
             MAJOR_VERSION_MISMATCH_NODE, actions=['error'])
         self.assertLenIs(messages, 1)
         self.assertIn('ismatch', str(messages[0]['text']))
         self.assertEqual('error', messages[0]['kind'])
 
+        self.assertStartsWith(node['files']['en']['markdown'], 'fileEn')
+        self.assertStartsWith(node['files']['default']['markdown'], 'fileDef')
+
     def test_mismatch_major_action_ignore(self):
-        messages = self.run_decorator(
+        node, messages = self.run_decorator(
             MAJOR_VERSION_MISMATCH_NODE, actions=['ignore'])
         self.assertLenIs(messages, 0)
 
+        self.assertStartsWith(node['files']['en']['markdown'], 'fileEn')
+        self.assertStartsWith(node['files']['default']['markdown'], 'fileDef')
+
     def test_mismatch_major_action_warn(self):
-        messages = self.run_decorator(
+        node, messages = self.run_decorator(
             MAJOR_VERSION_MISMATCH_NODE, actions=['warning'])
         self.assertLenIs(messages, 1)
         self.assertIn('ismatch', str(messages[0]['text']))
         self.assertEqual('warning', messages[0]['kind'])
 
+        self.assertStartsWith(node['files']['en']['markdown'], 'fileEn')
+        self.assertStartsWith(node['files']['default']['markdown'], 'fileDef')
+
+    def test_mismatch_major_action_append_macro(self):
+        node, messages = self.run_decorator(
+            MAJOR_VERSION_MISMATCH_NODE, actions=['append-macro-foo'])
+        self.assertEmpty(messages)
+
+        markdown = node['files']['en']['markdown']
+        self.assertStartsWith(markdown, 'fileEn\n{=macro(foo, ')
+        self.assertIn('11.003', markdown)
+        self.assertIn('2.003', markdown)
+
+        self.assertStartsWith(node['files']['default']['markdown'], 'fileDef')
+
     def test_mismatch_major_action_multiple(self):
-        messages = self.run_decorator(
+        node, messages = self.run_decorator(
             MAJOR_VERSION_MISMATCH_NODE, actions=['error', 'warning'])
         self.assertLenIs(messages, 2)
         self.assertIn('ismatch', str(messages[0]['text']))
@@ -111,12 +143,18 @@ class VersionCheckDecoratorTest(DocumentPageTestCase):
         self.assertIn('ismatch', str(messages[1]['text']))
         self.assertEqual('warning', messages[1]['kind'])
 
+        self.assertStartsWith(node['files']['en']['markdown'], 'fileEn')
+        self.assertStartsWith(node['files']['default']['markdown'], 'fileDef')
+
     def test_mismatch_major_action_unknown(self):
-        messages = self.run_decorator(
+        node, messages = self.run_decorator(
             MAJOR_VERSION_MISMATCH_NODE, actions=['foo'])
         self.assertLenIs(messages, 1)
         self.assertIn('"foo"', str(messages[0]['text']))
         self.assertEqual('error', messages[0]['kind'])
+
+        self.assertStartsWith(node['files']['en']['markdown'], 'fileEn')
+        self.assertStartsWith(node['files']['default']['markdown'], 'fileDef')
 
     def test_subnode(self):
         node11 = {
@@ -167,5 +205,5 @@ class VersionCheckDecoratorTest(DocumentPageTestCase):
             'subnodes': [node11, node12],
         }
 
-        messages = self.run_decorator(node)
+        _, messages = self.run_decorator(node)
         self.assertEmpty(messages)

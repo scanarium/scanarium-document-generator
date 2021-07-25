@@ -63,6 +63,8 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
 * `version_mismatch_actions`: Is a list (or `,` separated string) of
     actions to take if the major version of a file disagrees with the
     major version of the node's default file. Allowed actions are:
+    * `append-macro-FOO`: Appends the output of running the macro `FOO` (with
+        the error message as argument) to the markdwon of the file.
     * `error`: Mark an error for the version mismatch.
     * `ignore`: Ignore version mismatches.
     * `warning`: Mark a warning for the version mismatch.
