@@ -13,6 +13,7 @@ from .default_file_node_decorator import DefaultFileNodeDecorator
 from .id_decorator import IdDecorator
 from .level_decorator import LevelDecorator
 from .property_decorator import PropertyDecorator
+from .version_check_decorator import VersionCheckDecorator
 from .utils import Utils
 
 __all__ = (
@@ -29,4 +30,5 @@ __all__ = (
     'PropertyDecorator',
     'Utils',
     'ValueInjectorFileDecorator',
+    'VersionCheckDecorator',
     )

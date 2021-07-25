@@ -13,6 +13,7 @@ from .decorators import LevelDecorator
 from .decorators import MarkdownPropertyExtractorFileDecorator
 from .decorators import PropertyDecorator
 from .decorators import ValueInjectorFileDecorator
+from .decorators import VersionCheckDecorator
 
 
 class DocumentGenerator(object):
@@ -45,6 +46,7 @@ class DocumentGenerator(object):
             PropertyDecorator(BuildProperties(
                 markdown_dir, l10ns).getProperties()),
             IdDecorator(),
+            VersionCheckDecorator(),
             ValueInjectorFileDecorator(
                 macros=conf.get('macros', {}),
                 external_functions=conf.get('external_functions', {}),
