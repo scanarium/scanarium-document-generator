@@ -433,7 +433,10 @@ class AllInOneExporterTest(DocumentPageTestCase):
             'subnodes': [],
         }
         with self.tempDir() as dir:
-            exporter = AllInOneExporter(node1, dir, 'en', [])
+            value_injector = ValueInjectorFileDecorator()
+            value_injector_state = value_injector.init_state(node1)
+            exporter = AllInOneExporter(node1, dir, 'en', [], {},
+                                        value_injector, value_injector_state)
             exporter.export()
 
             contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
@@ -473,7 +476,10 @@ class AllInOneExporterTest(DocumentPageTestCase):
             'subnodes': [node11, node12, node13],
         }
         with self.tempDir() as dir:
-            exporter = AllInOneExporter(node1, dir, 'en', [])
+            value_injector = ValueInjectorFileDecorator()
+            value_injector_state = value_injector.init_state(node1)
+            exporter = AllInOneExporter(node1, dir, 'en', [], {},
+                                        value_injector, value_injector_state)
             exporter.export()
 
             contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
@@ -509,7 +515,10 @@ class AllInOneExporterTest(DocumentPageTestCase):
             'subnodes': [],
         }
         with self.tempDir() as dir:
-            exporter = AllInOneExporter(node1, dir, 'en', [])
+            value_injector = ValueInjectorFileDecorator()
+            value_injector_state = value_injector.init_state(node1)
+            exporter = AllInOneExporter(node1, dir, 'en', [], {},
+                                        value_injector, value_injector_state)
             exporter.export()
 
             contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
@@ -542,7 +551,10 @@ class AllInOneExporterTest(DocumentPageTestCase):
             'subnodes': [node11, node12, node13],
         }
         with self.tempDir() as dir:
-            exporter = AllInOneExporter(node1, dir, 'en', [])
+            value_injector = ValueInjectorFileDecorator()
+            value_injector_state = value_injector.init_state(node1)
+            exporter = AllInOneExporter(node1, dir, 'en', [], {},
+                                        value_injector, value_injector_state)
             exporter.export()
 
             contents = self.get_file_contents(os.path.join(dir, 'all.md.en'))
