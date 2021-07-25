@@ -3,7 +3,6 @@ import os
 from .document_generator_error import DocumentGeneratorError
 from .markdown_renderer import MarkdownRenderer
 from .decorators import Utils
-from .decorators import ValueInjectorFileDecorator
 
 HEADER = '<html><meta>' \
     '<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />' \
