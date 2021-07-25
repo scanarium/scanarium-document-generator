@@ -113,11 +113,12 @@ class AllInOneExporter(object):
         def subnodeCount(file, state, args):
             return str(len(capsules))
 
-        markdown = self.value_injector.decorate_text(
-            markdown, self.value_injector_state, funcs={
-                'linkedToc': linkedToc,
-                'subnodeCount': subnodeCount,
-                })
+        if self.value_injector:
+            markdown = self.value_injector.decorate_text(
+                markdown, self.value_injector_state, funcs={
+                    'linkedToc': linkedToc,
+                    'subnodeCount': subnodeCount,
+                    })
 
         for capsule in capsules:
             markdown += '\n\n' + capsule['markdown']
