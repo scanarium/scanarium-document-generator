@@ -60,6 +60,11 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
     * `$1`, `$2`,… to refer to the first, second,… argument.
     * `$*` to refer to all arguments concatenated by `, `.
     * `\\n` to denote a line-break.
+* `version_mismatch_actions`: Is a list (or `,` separated string) of
+    actions to take if the major version of a file disagrees with the
+    major version of the node's default file. Allowed actions are:
+    * `error`: Mark an error for the version mismatch.
+    * `warning`: Mark a warning for the version mismatch.
 
 Directories are relative to the current working directory. E.g.: If the
 generator is started from directory `.../foo`, the config file is

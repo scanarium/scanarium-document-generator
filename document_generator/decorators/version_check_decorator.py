@@ -2,6 +2,9 @@ from .decorator import Decorator
 
 
 class VersionCheckDecorator(Decorator):
+    def __init__(self, actions=['error']):
+        self.actions = actions
+
     def init_state(self, node):
         state = super().init_state(node)
 
@@ -22,7 +25,16 @@ class VersionCheckDecorator(Decorator):
     def handle_version_mismatch(self, node_version, file_version, state):
         message = f'Mismatch in major version. Node has {node_version}. ' \
             f'File has {file_version}'
-        self.add_error(state, message)
+        for action in self.actions:
+            action = action.strip()
+            if action == 'error':
+                self.add_error(state, message)
+            elif action == 'warning':
+                self.add_warning(state, message)
+            else:
+                self.add_error(
+                    state,
+                    f'Unkown action "{action}" in version check decorator')
 
     def decorate_file(self, file, state):
         if file['key'] != 'properties':

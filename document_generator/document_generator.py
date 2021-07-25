@@ -34,6 +34,11 @@ class DocumentGenerator(object):
         other_l10ns = conf['additional_l10ns']
         l10ns = [default_l10n] + other_l10ns
 
+        version_mismatch_actions = \
+            conf.get('version_mismatch_actions', 'error')
+        if isinstance(version_mismatch_actions, str):
+            version_mismatch_actions = version_mismatch_actions.split(',')
+
         parser = Parser()
         root_node = parser.parse(markdown_dir)
 
@@ -46,7 +51,7 @@ class DocumentGenerator(object):
             PropertyDecorator(BuildProperties(
                 markdown_dir, l10ns).getProperties()),
             IdDecorator(),
-            VersionCheckDecorator(),
+            VersionCheckDecorator(version_mismatch_actions),
             ValueInjectorFileDecorator(
                 macros=conf.get('macros', {}),
                 external_functions=conf.get('external_functions', {}),
