@@ -29,6 +29,8 @@ class VersionCheckDecorator(Decorator):
             action = action.strip()
             if action == 'error':
                 self.add_error(state, message)
+            elif action == 'ignore':
+                pass
             elif action == 'warning':
                 self.add_warning(state, message)
             else:

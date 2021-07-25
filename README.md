@@ -64,6 +64,7 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
     actions to take if the major version of a file disagrees with the
     major version of the node's default file. Allowed actions are:
     * `error`: Mark an error for the version mismatch.
+    * `ignore`: Ignore version mismatches.
     * `warning`: Mark a warning for the version mismatch.
 
 Directories are relative to the current working directory. E.g.: If the

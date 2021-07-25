@@ -90,6 +90,11 @@ class VersionCheckDecoratorTest(DocumentPageTestCase):
         self.assertIn('ismatch', str(messages[0]['text']))
         self.assertEqual('error', messages[0]['kind'])
 
+    def test_mismatch_major_action_ignore(self):
+        messages = self.run_decorator(
+            MAJOR_VERSION_MISMATCH_NODE, actions=['ignore'])
+        self.assertLenIs(messages, 0)
+
     def test_mismatch_major_action_warn(self):
         messages = self.run_decorator(
             MAJOR_VERSION_MISMATCH_NODE, actions=['warning'])
