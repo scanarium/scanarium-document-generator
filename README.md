@@ -69,6 +69,8 @@ A content repo's `config.json` is a JSON dictionary with the following key/value
     * `ignore`: Ignore version mismatches.
     * `warning`: Mark a warning for the version mismatch.
 
+    (The default is `error`)
+
 Directories are relative to the current working directory. E.g.: If the
 generator is started from directory `.../foo`, the config file is
 `.../bar/config.json` and `target` is set to `baz`, then the documentation will
