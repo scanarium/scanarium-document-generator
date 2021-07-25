@@ -1,7 +1,7 @@
-from .decorator import Decorator
+from .file_decorator import FileDecorator
 
 
-class DebugFileDecorator(Decorator):
+class DebugFileDecorator(FileDecorator):
     def __init__(self, enabled):
         self.enabled = enabled
 
